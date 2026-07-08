@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spottix – #1 Civic Reporting App in India</title>
+  <meta name="description" content="Spottix helps citizens report garbage, potholes, broken streetlights, water leakage, and civic problems in seconds with photo, location, tracking, and rewards." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="#hero" class="nav-logo">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="white"/>
+        </svg>
+      </div>
+      <span class="logo-text">Spottix</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#features" class="nav-link">Features</a></li>
+      <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+      <li><a href="#impact" class="nav-link">Impact</a></li>
+      <li><a href="#rewards" class="nav-link">Rewards</a></li>
+      <li><a href="#download" class="nav-link">Download</a></li>
+    </ul>
+    <a href="#download" class="btn-get-app">Get the App ↗</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero" id="hero">
+  <div class="hero-bg-orb orb1"></div>
+  <div class="hero-bg-orb orb2"></div>
+  <div class="hero-container">
+    <div class="hero-left reveal">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        #1 Civic Reporting App in India
+      </div>
+      <h1 class="hero-heading">
+        Spot civic issues.<br />
+        <span class="gradient-text">Report instantly.</span><br />
+        Build cleaner cities.
+      </h1>
+      <p class="hero-desc">
+        Spottix helps citizens report garbage, potholes, broken streetlights,
+        water leakage, and civic problems in seconds with photo, location,
+        tracking, and rewards.
+      </p>
+      <div class="hero-buttons">
+        <a href="#download" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          Download Free
+        </a>
+        <a href="#how-it-works" class="btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          See How It Works
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">100K+</span>
+          <span class="stat-label">Issues Reported</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">85%</span>
+          <span class="stat-label">Resolution Rate</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">50K+</span>
+          <span class="stat-label">Active Citizens</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right reveal reveal-right">
+      <div class="phone-mockup">
+        <div class="phone-screen">
+          <div class="phone-status-bar">
+            <span class="phone-location">📍 Bijnor, Uttar Pradesh</span>
+            <span class="phone-greeting">Good morning, Citizen 👋</span>
+          </div>
+          <div class="phone-categories">
+            <div class="cat-item">🚧<span>Pothole</span></div>
+            <div class="cat-item">🗑️<span>Garbage</span></div>
+            <div class="cat-item">💡<span>Streetlight</span></div>
+            <div class="cat-item">🛣️<span>Road</span></div>
+            <div class="cat-item">➕<span>Others</span></div>
+          </div>
+          <div class="phone-map-area">
+            <div class="map-pin" style="top:30%;left:35%">📍</div>
+            <div class="map-pin" style="top:50%;left:60%">📍</div>
+            <div class="map-pin" style="top:65%;left:45%">📍</div>
+          </div>
+          <a href="#download" class="phone-report-btn">+ Report Issue</a>
+        </div>
+        <div class="floating-card card-pothole reveal-float">
+          <span class="card-icon">🚧</span>
+          <div><strong>Pothole Reported</strong><small>MG Road · just now</small></div>
+        </div>
+        <div class="floating-card card-garbage reveal-float" style="animation-delay:.3s">
+          <span class="card-icon">✅</span>
+          <div><strong>Garbage Resolved</strong><small>2 hrs ago</small></div>
+        </div>
+        <div class="floating-card card-reward reveal-float" style="animation-delay:.6s">
+          <span class="card-icon">🎁</span>
+          <div><strong>+10 Reward Points</strong><small>Keep it up!</small></div>
+        </div>
+        <div class="floating-card card-streetlight reveal-float" style="animation-delay:.9s">
+          <span class="card-icon">💡</span>
+          <div><strong>Streetlight Fixed</strong><small>Ward 7</small></div>
+        </div>
+        <div class="floating-card card-ward reveal-float" style="animation-delay:1.2s">
+          <span class="card-icon">🏙️</span>
+          <div><strong>Ward 12 Updated</strong><small>3 issues cleared</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES SECTION ===== -->
+<section class="features" id="features">
+  <div class="section-container">
+    <div class="section-header reveal">
+      <h2 class="section-title">Powerful Features</h2>
+      <p class="section-subtitle">Everything you need to make a difference</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">⚡</div>
+        <h3>Quick Reporting</h3>
+        <p>Snap a photo, tag location, and report civic issues in under 30 seconds.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📍</div>
+        <h3>Smart Location</h3>
+        <p>Auto-detect your location and find nearby issues with interactive maps.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔔</div>
+        <h3>Real-time Tracking</h3>
+        <p>Get instant notifications when authorities review and resolve your reports.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🎁</div>
+        <h3>Earn Rewards</h3>
+        <p>Gain points, badges, and climb the leaderboard for every contribution.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">✅</div>
+        <h3>Verified Reports</h3>
+        <p>Community verification ensures only genuine issues reach authorities.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🚀</div>
+        <h3>Fast Resolution</h3>
+        <p>Direct integration with civic bodies for quicker issue resolution.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">👥</div>
+        <h3>Community Driven</h3>
+        <p>Join thousands of active citizens making their cities better together.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📊</div>
+        <h3>Impact Analytics</h3>
+        <p>Track your contributions and see the collective impact of your community.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS SECTION ===== -->
+<section class="how-it-works" id="how-it-works">
+  <div class="section-container">
+    <div class="section-header reveal">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">Report issues in 4 simple steps</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card reveal">
+        <div class="step-number">1</div>
+        <div class="step-emoji">📸</div>
+        <h3>Spot an Issue</h3>
+        <p>See garbage, potholes, broken streetlights, or any civic issue? Take a photo.</p>
+      </div>
+      <div class="step-arrow reveal">→</div>
+      <div class="step-card reveal">
+        <div class="step-number">2</div>
+        <div class="step-emoji">📤</div>
+        <h3>Upload Photo &amp; Location</h3>
+        <p>Add details, select category, and submit. Your location is auto-detected.</p>
+      </div>
+      <div class="step-arrow reveal">→</div>
+      <div class="step-card reveal">
+        <div class="step-number">3</div>
+        <div class="step-emoji">👁️</div>
+        <h3>Track Progress</h3>
+        <p>Watch as authorities review, verify, and start working on the issue.</p>
+      </div>
+      <div class="step-arrow reveal">→</div>
+      <div class="step-card step-card-highlight reveal">
+        <div class="step-number">4</div>
+        <div class="step-emoji">🎉</div>
+        <h3>Get Resolution &amp; Rewards</h3>
+        <p>Get notified when issue is resolved. Earn points and badges!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXPERIENCE SPOTTIX SECTION ===== -->
+<section class="experience" id="experience">
+  <div class="section-container">
+    <div class="section-header reveal">
+      <h2 class="section-title">Experience Spottix</h2>
+      <p class="section-subtitle">Simple, intuitive, and powerful</p>
+    </div>
+    <div class="app-cards-grid">
+      <div class="app-card reveal">
+        <div class="app-card-header">Report Issue</div>
+        <div class="app-card-body">
+          <div class="app-row">📷 Upload Photo</div>
+          <div class="app-row">📍 Auto-Location</div>
+          <div class="app-row">🏷️ Select Category</div>
+          <div class="app-row">📝 Add Details</div>
+          <a href="#download" class="app-submit-btn">Submit Report</a>
+        </div>
+        <div class="app-card-footer">
+          <strong>Report Issue</strong>
+          <p>Quick and easy issue reporting with photo, location, and category.</p>
+        </div>
+      </div>
+      <div class="app-card app-card-center reveal">
+        <div class="app-card-header">Map Tracking</div>
+        <div class="app-card-body map-body">
+          <div class="mini-map">
+            <div class="mini-pin" style="top:25%;left:30%">📍</div>
+            <div class="mini-pin" style="top:45%;left:55%">📍</div>
+            <div class="mini-pin" style="top:60%;left:40%">📍</div>
+            <div class="mini-pin" style="top:35%;left:70%">📍</div>
+          </div>
+          <button class="map-view-btn">View all nearby issues</button>
+        </div>
+        <div class="app-card-footer">
+          <strong>Map Tracking</strong>
+          <p>Track all issues on an interactive map with real-time updates.</p>
+        </div>
+      </div>
+      <div class="app-card reveal">
+        <div class="app-card-header">Rewards Dashboard</div>
+        <div class="app-card-body">
+          <div class="reward-row">🏆 <span>0 Points</span></div>
+          <div class="reward-row">🎖️ <span>0 Badges</span></div>
+          <div class="reward-row">🏅 <span>Rank #–</span></div>
+          <a href="#download" class="app-submit-btn">View Leaderboard</a>
+        </div>
+        <div class="app-card-footer">
+          <strong>Rewards Dashboard</strong>
+          <p>Earn points, unlock badges, and climb the leaderboard.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AUTHORITY DASHBOARD SECTION ===== -->
+<section class="authority" id="authority">
+  <div class="authority-bg-orb"></div>
+  <div class="section-container">
+    <div class="authority-grid">
+      <div class="authority-left reveal">
+        <div class="authority-badge">For Municipal Teams</div>
+        <h2 class="authority-title">Authority Dashboard</h2>
+        <p class="authority-desc">Powerful tools for civic bodies to manage and resolve issues efficiently</p>
+        <div class="authority-features">
+          <div class="auth-feature-row">
+            <div class="auth-icon">✅</div>
+            <div>
+              <strong>Verified Complaints</strong>
+              <p>Filter spam and get genuine citizen reports</p>
+            </div>
+          </div>
+          <div class="auth-feature-row">
+            <div class="auth-icon">🗺️</div>
+            <div>
+              <strong>Location-Based Map</strong>
+              <p>View all issues on interactive heatmap</p>
+            </div>
+          </div>
+          <div class="auth-feature-row">
+            <div class="auth-icon">🎯</div>
+            <div>
+              <strong>Priority Management</strong>
+              <p>Sort by urgency, category, and location</p>
+            </div>
+          </div>
+          <div class="auth-feature-row">
+            <div class="auth-icon">📈</div>
+            <div>
+              <strong>Resolution Tracking</strong>
+              <p>Monitor progress and performance metrics</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="authority-right reveal reveal-right">
+        <div class="dashboard-card glass-card">
+          <div class="dashboard-header">Dashboard Overview</div>
+          <div class="dashboard-stats">
+            <div class="dash-stat">
+              <span class="dash-num">245</span>
+              <span class="dash-label">Pending</span>
+            </div>
+            <div class="dash-stat">
+              <span class="dash-num">892</span>
+              <span class="dash-label">Resolved</span>
+            </div>
+          </div>
+          <div class="bar-chart">
+            <div class="bar" style="height:40%"></div>
+            <div class="bar" style="height:65%"></div>
+            <div class="bar" style="height:50%"></div>
+            <div class="bar" style="height:80%"></div>
+            <div class="bar" style="height:55%"></div>
+            <div class="bar" style="height:90%"></div>
+            <div class="bar" style="height:70%"></div>
+            <div class="bar bar-active" style="height:100%"></div>
+          </div>
+          <div class="chart-labels">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span>
+            <span>Fri</span><span>Sat</span><span>Sun</span><span>Today</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LIVE IMPACT SECTION ===== -->
+<section class="impact" id="impact">
+  <div class="section-container">
+    <div class="section-header reveal">
+      <h2 class="section-title">Live Impact</h2>
+      <p class="section-subtitle">Together, we're making cities cleaner</p>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-card reveal">
+        <div class="impact-icon">👥</div>
+        <div class="impact-number" data-target="50000">0</div>
+        <div class="impact-label">Active Users</div>
+      </div>
+      <div class="impact-card reveal">
+        <div class="impact-icon">📍</div>
+        <div class="impact-number" data-target="100000">0</div>
+        <div class="impact-label">Issues Reported</div>
+      </div>
+      <div class="impact-card reveal">
+        <div class="impact-icon impact-green">✅</div>
+        <div class="impact-number" data-target="85">0</div>
+        <div class="impact-percent">%</div>
+        <div class="impact-label">Resolution Rate</div>
+      </div>
+      <div class="impact-card impact-card-glow reveal">
+        <div class="impact-icon">🎁</div>
+        <div class="impact-number" data-target="10000">0</div>
+        <div class="impact-label">Rewards Earned</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GAMIFICATION & REWARDS SECTION ===== -->
+<section class="gamification" id="rewards">
+  <div class="section-container">
+    <div class="section-header reveal">
+      <h2 class="section-title">Gamification &amp; Rewards</h2>
+      <p class="section-subtitle">Get rewarded for making your city better</p>
+    </div>
+    <div class="gamification-grid">
+      <div class="gamification-left">
+        <div class="gam-card-mini reveal">
+          <div class="gam-icon">⭐</div>
+          <div>
+            <strong>Points</strong>
+            <p>Earn 10 points for every verified report</p>
+          </div>
+        </div>
+        <div class="gam-card-mini reveal">
+          <div class="gam-icon">🎖️</div>
+          <div>
+            <strong>Badges</strong>
+            <p>Unlock special badges for milestones</p>
+          </div>
+        </div>
+        <div class="gam-card-mini reveal">
+          <div class="gam-icon">🏆</div>
+          <div>
+            <strong>Leaderboard</strong>
+            <p>Compete with top contributors</p>
+          </div>
+        </div>
+        <div class="gam-card-mini reveal">
+          <div class="gam-icon">👑</div>
+          <div>
+            <strong>Citizen Rank</strong>
+            <p>Rise from Bronze to Diamond rank</p>
+          </div>
+        </div>
+      </div>
+      <div class="gamification-right">
+        <div class="rank-card reveal">
+          <div class="rank-row">
+            <span class="rank-medal">🥉</span>
+            <span class="rank-name">Bronze</span>
+            <span class="rank-pts">0–50 pts</span>
+          </div>
+        </div>
+        <div class="rank-card reveal">
+          <div class="rank-row">
+            <span class="rank-medal">🥈</span>
+            <span class="rank-name">Silver</span>
+            <span class="rank-pts">51–150 pts</span>
+          </div>
+        </div>
+        <div class="rank-card rank-card-gold reveal">
+          <div class="rank-row">
+            <span class="rank-medal">🥇</span>
+            <span class="rank-name">Gold</span>
+            <span class="rank-pts">151–500 pts</span>
+          </div>
+        </div>
+        <div class="rank-card reveal">
+          <div class="rank-row">
+            <span class="rank-medal">💎</span>
+            <span class="rank-name">Diamond</span>
+            <span class="rank-pts">500+ pts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS SECTION ===== -->
+<section class="testimonials" id="testimonials">
+  <div class="section-container">
+    <div class="section-header reveal">
+      <h2 class="section-title">What Citizens Say</h2>
+      <p class="section-subtitle">Join thousands making their cities better</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="testimonial-top">
+          <div class="stars">★★★★★</div>
+          <span class="quote-icon">"</span>
+        </div>
+        <p class="testimonial-text">"Spottix made it so easy to report the pothole near my house. It was fixed within 3 days! Finally, a platform that works."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#10b981,#3b82f6)">RS</div>
+          <div>
+            <strong>Rajesh Sharma</strong>
+            <small>Mumbai, Maharashtra</small>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="testimonial-top">
+          <div class="stars">★★★★★</div>
+          <span class="quote-icon">"</span>
+        </div>
+        <p class="testimonial-text">"Love the rewards system! I've earned 340 points and reached Gold rank. It feels great to contribute to my community."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)">PK</div>
+          <div>
+            <strong>Priya Kapoor</strong>
+            <small>Bangalore, Karnataka</small>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="testimonial-top">
+          <div class="stars">★★★★★</div>
+          <span class="quote-icon">"</span>
+        </div>
+        <p class="testimonial-text">"As a municipal officer, this app helps us manage complaints efficiently. The verification system filters out spam perfectly."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">AM</div>
+          <div>
+            <strong>Amit Mehta</strong>
+            <small>Delhi Municipal Corp</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DOWNLOAD SECTION ===== -->
+<section class="download" id="download">
+  <div class="download-bg-orb"></div>
+  <div class="section-container">
+    <div class="download-grid">
+      <div class="download-left reveal">
+        <h2 class="download-title">Start making your city <span class="gradient-text">cleaner</span> today.</h2>
+        <p class="download-desc">Join 50,000+ citizens already making a difference. Free to download. No ads.</p>
+        <div class="store-buttons">
+          <a href="#" class="store-btn">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M3.18 23.76c.3.17.64.24.98.21l13.3-13.3-2.97-2.97-11.31 16.06zm16.71-8.42l-2.57-1.48-2.97 2.97 2.97 2.97 2.6-1.5c.74-.43.74-1.53-.03-1.96zM.34 1.1C.13 1.4 0 1.79 0 2.28v19.44c0 .49.13.88.34 1.18l.07.07L10.61 12.9v-.24L.41 1.03l-.07.07zm11.45 12.07l2.97-2.97-2.97-2.97L8.82 10.2v3.6l2.97 2.97z"/></svg>
+            <div>
+              <small>Get it on</small>
+              <strong>Google Play</strong>
+            </div>
+          </a>
+          <a href="#" class="store-btn">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.15-2.22 1.3-2.2 3.88.03 3.02 2.65 4.03 2.68 4.04l-.03.1zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            <div>
+              <small>Download on the</small>
+              <strong>App Store</strong>
+            </div>
+          </a>
+        </div>
+        <div class="download-perks">
+          <span>✓ Free to use</span>
+          <span>✓ No ads</span>
+          <span>✓ Offline support</span>
+          <span>✓ Privacy focused</span>
+        </div>
+      </div>
+      <div class="download-right reveal reveal-right">
+        <div class="qr-card glass-card">
+          <div class="qr-code">
+            <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+              <rect width="120" height="120" fill="#0f1117" rx="8"/>
+              <g fill="#10b981">
+                <rect x="10" y="10" width="40" height="40" rx="4" fill="none" stroke="#10b981" stroke-width="4"/>
+                <rect x="20" y="20" width="20" height="20" rx="2"/>
+                <rect x="70" y="10" width="40" height="40" rx="4" fill="none" stroke="#10b981" stroke-width="4"/>
+                <rect x="80" y="20" width="20" height="20" rx="2"/>
+                <rect x="10" y="70" width="40" height="40" rx="4" fill="none" stroke="#10b981" stroke-width="4"/>
+                <rect x="20" y="80" width="20" height="20" rx="2"/>
+                <rect x="70" y="70" width="8" height="8"/>
+                <rect x="82" y="70" width="8" height="8"/>
+                <rect x="94" y="70" width="8" height="8" rx="2"/>
+                <rect x="70" y="82" width="8" height="8"/>
+                <rect x="94" y="82" width="8" height="8"/>
+                <rect x="82" y="94" width="8" height="8"/>
+                <rect x="70" y="94" width="8" height="8"/>
+                <rect x="94" y="94" width="8" height="8" rx="2"/>
+              </g>
+            </svg>
+          </div>
+          <p class="qr-label">Scan to Download</p>
+          <div class="qr-rating">⭐ 4.8 Rating · 10K+ Reviews</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="#hero" class="nav-logo">
+        <div class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="white"/>
+          </svg>
+        </div>
+        <span class="logo-text">Spottix</span>
+      </a>
+      <p>Making cities cleaner, one spot at a time.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#rewards">Rewards</a>
+        <a href="#download">Download</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Blog</a>
+        <a href="#">Careers</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Spottix. All rights reserved. Built for a cleaner India.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
