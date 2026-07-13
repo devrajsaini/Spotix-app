@@ -1,0 +1,155 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "HSR – Singasandra", "wardNo": 174, "resolutionRate": 89, "active": 62, "resolved": 107 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.62, 12.90], [77.66, 12.90], [77.66, 12.93], [77.62, 12.93], [77.62, 12.90]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bagalakunte", "wardNo": 7, "resolutionRate": 79, "active": 45, "resolved": 88 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.54, 13.04], [77.58, 13.04], [77.58, 13.07], [77.54, 13.07], [77.54, 13.04]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "K R Puram", "wardNo": 85, "resolutionRate": 78, "active": 52, "resolved": 95 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.68, 12.99], [77.72, 12.99], [77.72, 13.02], [77.68, 13.02], [77.68, 12.99]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Dodda Nekkundi", "wardNo": 82, "resolutionRate": 55, "active": 78, "resolved": 64 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.66, 12.96], [77.70, 12.96], [77.70, 12.99], [77.66, 12.99], [77.66, 12.96]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Indiranagar", "wardNo": 81, "resolutionRate": 91, "active": 18, "resolved": 142 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.63, 12.96], [77.66, 12.96], [77.66, 12.99], [77.63, 12.99], [77.63, 12.96]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Koramangala", "wardNo": 151, "resolutionRate": 85, "active": 32, "resolved": 118 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.60, 12.93], [77.64, 12.93], [77.64, 12.96], [77.60, 12.96], [77.60, 12.93]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Jayanagar", "wardNo": 170, "resolutionRate": 92, "active": 14, "resolved": 156 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.57, 12.92], [77.60, 12.92], [77.60, 12.95], [77.57, 12.95], [77.57, 12.92]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Malleshwaram", "wardNo": 44, "resolutionRate": 88, "active": 22, "resolved": 130 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.56, 12.99], [77.59, 12.99], [77.59, 13.02], [77.56, 13.02], [77.56, 12.99]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Rajajinagar", "wardNo": 45, "resolutionRate": 72, "active": 48, "resolved": 84 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.53, 12.99], [77.56, 12.99], [77.56, 13.02], [77.53, 13.02], [77.53, 12.99]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Whitefield", "wardNo": 85, "resolutionRate": 48, "active": 95, "resolved": 52 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.72, 12.96], [77.77, 12.96], [77.77, 13.00], [77.72, 13.00], [77.72, 12.96]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Mahadevapura", "wardNo": 83, "resolutionRate": 62, "active": 68, "resolved": 72 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.68, 12.95], [77.72, 12.95], [77.72, 12.98], [77.68, 12.98], [77.68, 12.95]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bellandur", "wardNo": 150, "resolutionRate": 45, "active": 102, "resolved": 58 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.66, 12.93], [77.70, 12.93], [77.70, 12.96], [77.66, 12.96], [77.66, 12.93]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "BTM Layout", "wardNo": 176, "resolutionRate": 82, "active": 38, "resolved": 112 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.60, 12.90], [77.62, 12.90], [77.62, 12.93], [77.60, 12.93], [77.60, 12.90]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "JP Nagar", "wardNo": 178, "resolutionRate": 76, "active": 42, "resolved": 98 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.57, 12.89], [77.60, 12.89], [77.60, 12.92], [77.57, 12.92], [77.57, 12.89]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Banashankari", "wardNo": 183, "resolutionRate": 68, "active": 55, "resolved": 78 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.54, 12.89], [77.57, 12.89], [77.57, 12.92], [77.54, 12.92], [77.54, 12.89]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Basavanagudi", "wardNo": 162, "resolutionRate": 94, "active": 8, "resolved": 168 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.56, 12.95], [77.59, 12.95], [77.59, 12.98], [77.56, 12.98], [77.56, 12.95]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Shivajinagar", "wardNo": 76, "resolutionRate": 58, "active": 72, "resolved": 68 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.59, 12.98], [77.62, 12.98], [77.62, 13.01], [77.59, 13.01], [77.59, 12.98]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Yelahanka", "wardNo": 2, "resolutionRate": 83, "active": 28, "resolved": 105 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.56, 13.08], [77.60, 13.08], [77.60, 13.12], [77.56, 13.12], [77.56, 13.08]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Hebbal", "wardNo": 18, "resolutionRate": 71, "active": 50, "resolved": 82 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.58, 13.04], [77.62, 13.04], [77.62, 13.07], [77.58, 13.07], [77.58, 13.04]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "RT Nagar", "wardNo": 20, "resolutionRate": 64, "active": 60, "resolved": 74 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.59, 13.01], [77.62, 13.01], [77.62, 13.04], [77.59, 13.04], [77.59, 13.01]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Vijayanagar", "wardNo": 128, "resolutionRate": 52, "active": 82, "resolved": 60 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.51, 12.96], [77.55, 12.96], [77.55, 12.99], [77.51, 12.99], [77.51, 12.96]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Peenya", "wardNo": 9, "resolutionRate": 42, "active": 110, "resolved": 48 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.50, 13.02], [77.54, 13.02], [77.54, 13.05], [77.50, 13.05], [77.50, 13.02]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Yeshwanthpur", "wardNo": 30, "resolutionRate": 75, "active": 44, "resolved": 90 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.54, 13.01], [77.57, 13.01], [77.57, 13.04], [77.54, 13.04], [77.54, 13.01]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Electronic City", "wardNo": 198, "resolutionRate": 56, "active": 76, "resolved": 66 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.64, 12.84], [77.68, 12.84], [77.68, 12.88], [77.64, 12.88], [77.64, 12.84]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bommanahalli", "wardNo": 190, "resolutionRate": 73, "active": 46, "resolved": 86 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.61, 12.88], [77.64, 12.88], [77.64, 12.91], [77.61, 12.91], [77.61, 12.88]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Dasarahalli", "wardNo": 8, "resolutionRate": 38, "active": 118, "resolved": 42 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.50, 13.05], [77.54, 13.05], [77.54, 13.08], [77.50, 13.08], [77.50, 13.05]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Marathahalli", "wardNo": 84, "resolutionRate": 66, "active": 58, "resolved": 76 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.68, 12.93], [77.72, 12.93], [77.72, 12.96], [77.68, 12.96], [77.68, 12.93]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "MG Road", "wardNo": 77, "resolutionRate": 87, "active": 24, "resolved": 126 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.59, 12.96], [77.63, 12.96], [77.63, 12.98], [77.59, 12.98], [77.59, 12.96]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Nagarbhavi", "wardNo": 131, "resolutionRate": 60, "active": 64, "resolved": 70 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.49, 12.94], [77.53, 12.94], [77.53, 12.97], [77.49, 12.97], [77.49, 12.94]]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kengeri", "wardNo": 195, "resolutionRate": 44, "active": 98, "resolved": 54 },
+      "geometry": { "type": "Polygon", "coordinates": [[[77.47, 12.90], [77.51, 12.90], [77.51, 12.94], [77.47, 12.94], [77.47, 12.90]]] }
+    }
+  ]
+}

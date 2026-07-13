@@ -668,6 +668,131 @@ setInterval(updateClock, 60000); updateClock();
 
 })();
 
+/* ================================================================
+   LEAFLET BENGALURU WARD MAP
+================================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  const mapEl = document.getElementById('blrMap');
+  if (!mapEl) return;
+
+  // Initialize Map
+  const map = L.map('blrMap', {
+    zoomControl: true,
+    scrollWheelZoom: false
+  }).setView([12.9716, 77.5946], 11);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
+
+  function getColor(rate) {
+    if (rate >= 80) return '#22c55e'; // Green
+    if (rate >= 60) return '#f59e0b'; // Yellow/Orange
+    return '#ef4444';                 // Red
+  }
+
+  function getStatusBadge(rate) {
+    if (rate >= 80) return { text: 'Green (Excellent)', class: 'badge-green' };
+    if (rate >= 60) return { text: 'Average', class: 'badge-yellow' };
+    return { text: 'Needs Attention', class: 'badge-red' };
+  }
+
+  let geojsonLayer;
+
+  // Load GeoJSON data
+  fetch('assets/bengaluru_wards.geojson')
+    .then(res => res.json())
+    .then(data => {
+      geojsonLayer = L.geoJSON(data, {
+        style: function(feature) {
+          const rate = feature.properties.resolutionRate || 0;
+          return {
+            fillColor: getColor(rate),
+            weight: 1,
+            opacity: 1,
+            color: 'rgba(255,255,255,0.4)',
+            fillOpacity: 0.6
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          // Hover effects
+          layer.on('mouseover', function(e) {
+            const l = e.target;
+            l.setStyle({
+              weight: 2,
+              color: '#ffffff',
+              fillOpacity: 0.8
+            });
+            l.bringToFront();
+            if(l._path) l._path.style.cursor = 'pointer';
+          });
+          
+          layer.on('mouseout', function(e) {
+            geojsonLayer.resetStyle(e.target);
+          });
+
+          // Click behavior
+          layer.on('click', function(e) {
+            const props = feature.properties;
+            
+            // Hide default panel, show stats panel
+            const defaultPanel = document.getElementById('blrPanelDefault');
+            const statsPanel = document.getElementById('blrWardStats');
+            if(defaultPanel) defaultPanel.style.display = 'none';
+            if(statsPanel) statsPanel.style.display = 'flex';
+
+            // Update details
+            const nameEl = document.getElementById('blrWardName');
+            if(nameEl) nameEl.textContent = props.name;
+            
+            const badge = getStatusBadge(props.resolutionRate);
+            const badgeEl = document.getElementById('blrStatsBadge');
+            if(badgeEl) {
+              badgeEl.textContent = badge.text;
+              badgeEl.className = 'blr-stats-badge ' + badge.class;
+            }
+            
+            const ratePctEl = document.getElementById('blrRatePct');
+            if(ratePctEl) ratePctEl.textContent = props.resolutionRate + '%';
+            
+            const bar = document.getElementById('blrRateBar');
+            if(bar) {
+              bar.style.width = props.resolutionRate + '%';
+              bar.style.backgroundColor = getColor(props.resolutionRate);
+            }
+
+            const activeEl = document.getElementById('blrActive');
+            if(activeEl) activeEl.textContent = props.active;
+            
+            const resolvedEl = document.getElementById('blrResolved');
+            if(resolvedEl) resolvedEl.textContent = props.resolved;
+          });
+        }
+      }).addTo(map);
+
+      // Fit map to polygons
+      map.fitBounds(geojsonLayer.getBounds());
+    })
+    .catch(err => console.error("Error loading GeoJSON:", err));
+
+  // Invalidate size on section visible and resize
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        setTimeout(() => map.invalidateSize(), 100);
+      }
+    });
+  });
+  
+  const section = document.getElementById('problem');
+  if (section) observer.observe(section);
+  
+  window.addEventListener('resize', () => {
+    map.invalidateSize();
+  });
+});
 /* ============================================================
    COMMUNITY MODAL
 ============================================================ */
