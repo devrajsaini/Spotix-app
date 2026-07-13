@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spottix – Let's Make Bengaluru Spotless Together</title>
+  <meta name="description" content="Spottix is a citizen-first app that helps you report garbage, track cleanups, and build a cleaner, greener Bengaluru." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="#home" class="nav-logo">
+      <div class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="white"/>
+        </svg>
+      </div>
+      <span class="logo-text">Spottix</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home"         class="nav-link active">Home</a></li>
+      <li><a href="#features"     class="nav-link">Features</a></li>
+      <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+      <li><a href="#community"    class="nav-link">Community</a></li>
+      <li><a href="#screenshots"  class="nav-link">Screenshots</a></li>
+      <li><a href="#faq"          class="nav-link">FAQ</a></li>
+      <li><a href="#contact"      class="nav-link">Contact</a></li>
+    </ul>
+    <a href="#download" class="btn-nav-dl">Download App</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-city-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-left reveal">
+      <div class="hero-badge">
+        <span class="badge-dot"></span> #1 Citizen Reporting App in Bengaluru
+      </div>
+      <h1 class="hero-h1">
+        Let's Make<br>
+        <span class="green-text">Bengaluru</span><br>
+        Spotless Together
+        <span class="h1-underline"></span>
+      </h1>
+      <p class="hero-desc">Spottix is a citizen-first app that helps you report garbage, track cleanups, and build a cleaner, greener Bengaluru.</p>
+      <div class="hero-btns">
+        <a href="#download" class="btn-store">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M3.18 23.76c.3.17.64.24.98.21l13.3-13.3-2.97-2.97-11.31 16.06zm16.71-8.42l-2.57-1.48-2.97 2.97 2.97 2.97 2.6-1.5c.74-.43.74-1.53-.03-1.96zM.34 1.1C.13 1.4 0 1.79 0 2.28v19.44c0 .49.13.88.34 1.18l.07.07L10.61 12.9v-.24L.41 1.03l-.07.07zm11.45 12.07l2.97-2.97-2.97-2.97L8.82 10.2v3.6l2.97 2.97z"/></svg>
+          <div><small>GET IT ON</small><strong>Google Play</strong></div>
+        </a>
+        <a href="#download" class="btn-store">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.22.15-2.22 1.3-2.2 3.88.03 3.02 2.65 4.03 2.68 4.04zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <div><small>Download on the</small><strong>App Store</strong></div>
+        </a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-avs">
+          <div class="tav av1">RK</div>
+          <div class="tav av2">AS</div>
+          <div class="tav av3">PM</div>
+          <div class="tav av4">+2k</div>
+        </div>
+        <span class="trust-txt">Trusted by 2,000+ active citizens</span>
+      </div>
+    </div>
+    <div class="hero-right reveal">
+      <div class="phone-wrap">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-status-bar">
+            <span>9:41</span>
+            <div class="ps-icons">
+              <svg width="13" height="9" viewBox="0 0 14 10" fill="white"><rect x="0" y="4" width="2" height="6" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+              <svg width="13" height="9" viewBox="0 0 24 24" fill="white"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+              <svg width="20" height="10" viewBox="0 0 24 12" fill="none"><rect x="0" y="1" width="20" height="10" rx="2" stroke="white" stroke-width="1.5"/><rect x="1.5" y="2.5" width="14" height="7" rx="1" fill="white"/><path d="M21 4.5v3a1.5 1.5 0 000-3z" fill="white"/></svg>
+            </div>
+          </div>
+          <div class="phone-screen">
+            <div class="app-topbar">
+              <div class="app-logo-pill">
+                <div class="app-logo-ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#22c55e"/></svg></div>
+                <span>Spottix</span>
+              </div>
+              <span class="app-bell">🔔</span>
+            </div>
+            <div class="app-banner">
+              <p class="app-banner-sm">Together for</p>
+              <p class="app-banner-lg">a clean Bengaluru</p>
+              <span class="app-banner-ico">♻️</span>
+            </div>
+            <div class="app-cats">
+              <div class="app-cat"><div class="cat-ico">📷</div><span>Report</span></div>
+              <div class="app-cat"><div class="cat-ico">📍</div><span>Track</span></div>
+              <div class="app-cat"><div class="cat-ico">👁️</div><span>See</span></div>
+              <div class="app-cat"><div class="cat-ico">📊</div><span>Impact</span></div>
+            </div>
+            <div class="app-reports-label">Recent Reports <span class="see-all">View All</span></div>
+            <div class="app-report-row">
+              <div class="rep-thumb rep-garbage"></div>
+              <div class="rep-info">
+                <div class="rep-title">Garbage on roadside</div>
+                <div class="rep-loc">📍 Koramangala 4th Block</div>
+                <span class="rep-badge rbadge-ip">In Progress</span>
+              </div>
+              <span class="rep-time">2h ago</span>
+            </div>
+            <div class="app-report-row">
+              <div class="rep-thumb rep-dustbin"></div>
+              <div class="rep-info">
+                <div class="rep-title">Overflowing Dustbin</div>
+                <div class="rep-loc">📍 HSR Layout, Bengaluru</div>
+                <span class="rep-badge rbadge-ok">Resolved</span>
+              </div>
+              <span class="rep-time">1d ago</span>
+            </div>
+            <div class="app-bottom-bar">
+              <div class="abb-item abb-active">🏠<span>Home</span></div>
+              <div class="abb-item">🗺️<span>Map</span></div>
+              <div class="abb-plus">+</div>
+              <div class="abb-item">📋<span>Updates</span></div>
+              <div class="abb-item">👤<span>Profile</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROBLEM + MAP ROW ===== -->
+<section class="two-col-section" id="problem">
+  <div class="page-container">
+    <div class="two-col-grid">
+      <!-- left: problem stats -->
+      <div class="two-col-left">
+        <h2 class="sec-title reveal">The Problem We Face</h2>
+        <div class="problem-grid">
+          <div class="problem-card reveal"><div class="pc-icon">🗑️</div><div class="pc-num">10,000+</div><div class="pc-label">Tons of waste generated daily</div></div>
+          <div class="problem-card reveal"><div class="pc-icon">📍</div><div class="pc-num">2,500+</div><div class="pc-label">Garbage spots reported monthly</div></div>
+          <div class="problem-card reveal"><div class="pc-icon">📊</div><div class="pc-num">60%</div><div class="pc-label">Reports go untracked</div></div>
+          <div class="problem-card reveal"><div class="pc-icon">🏙️</div><div class="pc-num">1 City</div><div class="pc-label">That deserves to be better</div></div>
+        </div>
+      </div>
+      <!-- right: real leaflet map -->
+      <div class="two-col-right">
+        <h2 class="sec-title reveal">Reports From All Over <span class="green-text">Bengaluru</span></h2>
+        <div class="blr-map-wrap">
+          <div class="blr-map-container">
+            <div id="blrMap"></div>
+          </div>
+          <div class="blr-map-panel" id="blrPanel">
+            <div class="blr-panel-default" id="blrPanelDefault">
+              <div class="blr-legend">
+                <div class="blr-legend-title">WARD STATUS</div>
+                <div class="blr-legend-item"><span class="blr-dot blr-dot-green"></span>&gt;80% Resolved</div>
+                <div class="blr-legend-item"><span class="blr-dot blr-dot-yellow"></span>60–80%</div>
+                <div class="blr-legend-item"><span class="blr-dot blr-dot-red"></span>&lt;60%</div>
+              </div>
+              <div class="blr-panel-hint">💡 Click any ward on the map to see its live stats.</div>
+            </div>
+            <div class="blr-ward-stats" id="blrWardStats" style="display:none">
+              <div class="blr-stats-label">WARD STATISTICS</div>
+              <div class="blr-stats-badge" id="blrStatsBadge"></div>
+              <div class="blr-ward-name" id="blrWardName"></div>
+              <div class="blr-rate-label">Resolution Rate</div>
+              <div class="blr-rate-bar-wrap">
+                <div class="blr-rate-bar" id="blrRateBar"></div>
+                <span class="blr-rate-pct" id="blrRatePct"></span>
+              </div>
+              <div class="blr-issue-row">
+                <div class="blr-issue-box">
+                  <div class="blr-issue-val blr-issue-active" id="blrActive"></div>
+                  <div class="blr-issue-lbl">Active Issues</div>
+                </div>
+                <div class="blr-issue-box">
+                  <div class="blr-issue-val blr-issue-resolved" id="blrResolved"></div>
+                  <div class="blr-issue-lbl">Resolved Issues</div>
+                </div>
+              </div>
+              <div class="blr-panel-hint">💡 Click any ward on the map to see its live stats.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS + REAL IMPACT ROW ===== -->
+<section class="two-col-section" id="how-it-works">
+  <div class="page-container">
+    <div class="two-col-grid">
+      <!-- left: how it works — simple clickable cards, no inline forms -->
+      <div class="two-col-left">
+        <h2 class="sec-title reveal">How <span class="green-text">Spottix</span> Works</h2>
+
+        <div class="hiw-steps reveal">
+
+          <!-- 1. Report card -->
+          <a href="report.html" class="hiw-step" aria-label="Go to Report page">
+            <div class="hiw-step-circle">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </div>
+            <div class="hiw-step-num">1. Report</div>
+            <p class="hiw-step-desc">Take a photo of the garbage and submit the location.</p>
+          </a>
+
+          <div class="hiw-connector"><div class="hiw-line"></div></div>
+
+          <!-- 2. Track card -->
+          <a href="track.html" class="hiw-step" aria-label="Go to Track page">
+            <div class="hiw-step-circle">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 010 8.49m-8.48-.01a6 6 0 010-8.49m11.31-2.82a10 10 0 010 14.14m-14.14 0a10 10 0 010-14.14"/></svg>
+            </div>
+            <div class="hiw-step-num">2. Track</div>
+            <p class="hiw-step-desc">Track the status of your report in real-time.</p>
+          </a>
+
+          <div class="hiw-connector"><div class="hiw-line"></div></div>
+
+          <!-- 3. Clean card -->
+          <a href="clean.html" class="hiw-step hiw-step-green" aria-label="Go to Clean page">
+            <div class="hiw-step-circle">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <div class="hiw-step-num">3. Clean</div>
+            <p class="hiw-step-desc">Authorities take action and the spot gets cleaned.</p>
+          </a>
+
+        </div>
+      </div>
+      <!-- right: real impact -->
+      <div class="two-col-right">
+        <h2 class="sec-title reveal">Real Impact. <span class="green-text">Real Change.</span></h2>
+        <div class="impact-cards reveal">
+          <div class="impact-before">
+            <div class="impact-label impact-before-lbl">Before</div>
+            <div class="impact-img-area impact-before-bg" style="padding: 0;">
+              <img class="impact-img" src="assets/before_garbage_pile.png" alt="Before Cleanup">
+            </div>
+          </div>
+          <div class="impact-arrow-btn">→</div>
+          <div class="impact-after">
+            <div class="impact-label impact-after-lbl">After</div>
+            <div class="impact-img-area impact-after-bg" style="padding: 0;">
+              <img class="impact-img" src="assets/after_clean_road.png" alt="After Cleanup">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features-section" id="features">
+  <div class="page-container">
+    <h2 class="sec-title sec-title-center reveal">Powerful <span class="green-text">Features</span></h2>
+    <div class="feats-row" id="featsRow">
+
+      <div class="feat-card reveal" data-feature="report" tabindex="0" role="button" aria-label="Easy Reporting – click to open report screen">
+        <div class="feat-card-icon-wrap">
+          <svg class="feat-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </div>
+        <div class="feat-card-title">Easy Reporting</div>
+        <div class="feat-card-desc">Report garbage in just a few taps.</div>
+        <div class="feat-card-cta">Open Reporter <span class="feat-arrow">→</span></div>
+      </div>
+
+      <div class="feat-card reveal" data-feature="myreports" tabindex="0" role="button" aria-label="Live Tracking – click to track reports">
+        <div class="feat-card-icon-wrap">
+          <svg class="feat-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 010 8.49m-8.48-.01a6 6 0 010-8.49m11.31-2.82a10 10 0 010 14.14m-14.14 0a10 10 0 010-14.14"/>
+          </svg>
+        </div>
+        <div class="feat-card-title">Live Tracking</div>
+        <div class="feat-card-desc">Trace real-time status of your reports.</div>
+        <div class="feat-card-cta">Track Reports <span class="feat-arrow">→</span></div>
+      </div>
+
+      <div class="feat-card reveal" data-feature="map" tabindex="0" role="button" aria-label="Live Map – click to open Bengaluru map">
+        <div class="feat-card-icon-wrap">
+          <svg class="feat-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>
+          </svg>
+        </div>
+        <div class="feat-card-title">Live Map</div>
+        <div class="feat-card-desc">View garbage spots on live map.</div>
+        <div class="feat-card-cta">View Map <span class="feat-arrow">→</span></div>
+      </div>
+
+      <div class="feat-card reveal" data-feature="community" tabindex="0" role="button" aria-label="Community Power – click to join community events">
+        <div class="feat-card-icon-wrap">
+          <svg class="feat-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+        </div>
+        <div class="feat-card-title">Community Power</div>
+        <div class="feat-card-desc">Join volunteers and make an impact.</div>
+        <div class="feat-card-cta">Join Community <span class="feat-arrow">→</span></div>
+      </div>
+
+      <div class="feat-card reveal" data-feature="ranks" tabindex="0" role="button" aria-label="Rewards – click to view rewards and ranks">
+        <div class="feat-card-icon-wrap">
+          <svg class="feat-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17a2 2 0 002 2h0a2 2 0 002-2v-2.34m3-4.34a9 9 0 01-10 0"/><path d="M18 2H6v7a6 6 0 0012 0V2z"/>
+          </svg>
+        </div>
+        <div class="feat-card-title">Rewards</div>
+        <div class="feat-card-desc">Earn points &amp; badges for good actions.</div>
+        <div class="feat-card-cta">View Rewards <span class="feat-arrow">→</span></div>
+      </div>
+
+    </div>
+
+    <!-- Mobile dots/arrows for features carousel -->
+    <div class="feats-mobile-nav" id="featsMobileNav">
+      <button class="feats-mob-arrow feats-mob-prev" id="featsPrev" aria-label="Previous feature">&#8249;</button>
+      <div class="feats-mob-dots" id="featsDots">
+        <span class="feats-dot active"></span>
+        <span class="feats-dot"></span>
+        <span class="feats-dot"></span>
+        <span class="feats-dot"></span>
+        <span class="feats-dot"></span>
+      </div>
+      <button class="feats-mob-arrow feats-mob-next" id="featsNext" aria-label="Next feature">&#8250;</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMMUNITY MODAL ===== -->
+<div class="comm-modal-overlay" id="commModalOverlay" role="dialog" aria-modal="true" aria-label="Community Events">
+  <div class="comm-modal" id="commModal">
+    <button class="comm-modal-close" id="commModalClose" aria-label="Close community modal">✕</button>
+    <div class="comm-modal-head">
+      <div class="comm-modal-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <div>
+        <h3 class="comm-modal-title">Community Power</h3>
+        <p class="comm-modal-sub">Join cleanup events and volunteers near you</p>
+      </div>
+    </div>
+    <div class="comm-modal-body" id="commModalBody"></div>
+  </div>
+</div>
+
+<!-- ===== MODAL OVERLAY ===== -->
+<div class="spx-modal-overlay" id="spxModalOverlay" role="dialog" aria-modal="true" aria-label="Phone Preview">
+  <div class="spx-modal">
+    <button class="spx-modal-close" id="spxModalClose" aria-label="Close preview">✕</button>
+    <div class="spx-modal-phone">
+      <div class="spx-phone-shell">
+        <div class="spx-phone-notch"></div>
+        <div class="spx-phone-status"><span id="spxTime">9:41</span><div class="spx-ps-r"><svg width="14" height="10" viewBox="0 0 14 10" fill="white"><rect x="0" y="4" width="2" height="6" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/></svg><svg width="13" height="9" viewBox="0 0 24 24" fill="white"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div></div>
+        <div class="spx-screen" id="spxScreen">
+          <!-- Content injected by JS -->
+        </div>
+        <!-- Bottom Nav -->
+        <div class="spx-bnav" id="spxBnav">
+          <button class="spx-bni" data-screen="home" aria-label="Home">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+            <span>Home</span>
+          </button>
+          <button class="spx-bni" data-screen="map" aria-label="Map">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+            <span>Map</span>
+          </button>
+          <button class="spx-bni spx-bni-report" data-screen="report" aria-label="Report">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <button class="spx-bni" data-screen="ranks" aria-label="Ranks">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>
+            <span>Ranks</span>
+          </button>
+          <button class="spx-bni" data-screen="account" aria-label="Account">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Account</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREENSHOTS SLIDER ===== -->
+<section class="screenshots-section" id="screenshots">
+  <div class="page-container">
+    <h2 class="sec-title sec-title-center reveal"><span class="green-text">Spottix</span> In Action</h2>
+    <div class="ss-wrap">
+      <button class="ss-arrow ss-prev" id="ssPrev" aria-label="Previous">&#8249;</button>
+      <div class="ss-overflow">
+        <div class="ss-track" id="ssTrack">
+
+          <div class="ss-card reveal" data-screen="map" tabindex="0" role="button" aria-label="Open Map View">
+            <div class="ss-phone">
+              <div class="ss-notch"></div>
+              <div class="ss-sbar"><span>9:41</span><span>▮▮▮</span></div>
+              <div class="ss-hdr">🗺️ Map View</div>
+              <div class="ss-map">
+                <div class="ss-dot-pin" style="top:28%;left:22%">📍</div>
+                <div class="ss-dot-pin" style="top:52%;left:54%">📍</div>
+                <div class="ss-dot-pin" style="top:68%;left:36%">📍</div>
+                <div class="ss-dot-pin" style="top:38%;left:72%">📍</div>
+                <div class="ss-map-lbl">Bengaluru</div>
+              </div>
+              <div class="ss-tap-hint">Tap to explore</div>
+              <div class="ss-bnav"><div class="ss-bni"><span>🏠</span><span>Home</span></div><div class="ss-bni ss-bni-act"><span>🗺️</span><span>Map</span></div><div class="ss-bni"><div class="ss-plus">+</div></div><div class="ss-bni"><span>🏆</span><span>Ranks</span></div><div class="ss-bni"><span>👤</span><span>Account</span></div></div>
+            </div>
+          </div>
+
+          <div class="ss-card reveal" data-screen="report" tabindex="0" role="button" aria-label="Open Report a Spot">
+            <div class="ss-phone">
+              <div class="ss-notch"></div>
+              <div class="ss-sbar"><span>9:41</span><span>▮▮▮</span></div>
+              <div class="ss-hdr">📷 Report a Spot</div>
+              <div class="ss-report-body">
+                <div class="ss-pick">Pick category</div>
+                <div class="ss-cats">
+                  <div class="ss-cat scat-g"><span>🗑️</span><span>Garbage</span></div>
+                  <div class="ss-cat scat-o"><span>💧</span><span>Sewage</span></div>
+                  <div class="ss-cat scat-r"><span>🔧</span><span>Road Damage</span></div>
+                  <div class="ss-cat scat-p"><span>💡</span><span>Street Light</span></div>
+                  <div class="ss-cat scat-y"><span>🌊</span><span>Water Issue</span></div>
+                  <div class="ss-cat scat-b"><span>🏛️</span><span>Public Property</span></div>
+                </div>
+                <div class="ss-continue">Continue</div>
+              </div>
+              <div class="ss-tap-hint">Tap to report</div>
+              <div class="ss-bnav"><div class="ss-bni"><span>🏠</span><span>Home</span></div><div class="ss-bni"><span>🗺️</span><span>Map</span></div><div class="ss-bni ss-bni-act"><div class="ss-plus">+</div></div><div class="ss-bni"><span>🏆</span><span>Ranks</span></div><div class="ss-bni"><span>👤</span><span>Account</span></div></div>
+            </div>
+          </div>
+
+          <div class="ss-card reveal" data-screen="myreports" tabindex="0" role="button" aria-label="Open My Reports">
+            <div class="ss-phone">
+              <div class="ss-notch"></div>
+              <div class="ss-sbar"><span>9:41</span><span>▮▮▮</span></div>
+              <div class="ss-hdr" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <span>📋 My Reports</span>
+                <span style="font-size: 0.52rem; color: var(--g); font-weight: 700;">4 total</span>
+              </div>
+              <div class="ss-rlist">
+                <div class="ss-ritem">
+                  <div class="ss-ri">
+                    <span class="ss-rt">Garbage on roadside</span>
+                    <span class="ss-rb srb-ok">Resolved</span>
+                  </div>
+                  <div class="ss-rl">📍 Koramangala, Bengaluru</div>
+                  <div class="ss-rd">12 Jun 2025</div>
+                </div>
+                <div class="ss-ritem">
+                  <div class="ss-ri">
+                    <span class="ss-rt">Overflowing dustbin</span>
+                    <span class="ss-rb srb-ip">In Progress</span>
+                  </div>
+                  <div class="ss-rl">📍 HSR Layout, Bengaluru</div>
+                  <div class="ss-rd">10 Jun 2025</div>
+                </div>
+                <div class="ss-ritem">
+                  <div class="ss-ri">
+                    <span class="ss-rt">Broken streetlight</span>
+                    <span class="ss-rb srb-ok">Resolved</span>
+                  </div>
+                  <div class="ss-rl">📍 Indiranagar, Bengaluru</div>
+                  <div class="ss-rd">08 Jun 2025</div>
+                </div>
+                <div class="ss-ritem">
+                  <div class="ss-ri">
+                    <span class="ss-rt">Water leakage</span>
+                    <span class="ss-rb srb-pd">Pending</span>
+                  </div>
+                  <div class="ss-rl">📍 Jayanagar, Bengaluru</div>
+                  <div class="ss-rd">05 Jun 2025</div>
+                </div>
+              </div>
+              <div class="ss-tap-hint">Tap to view</div>
+              <div class="ss-bnav"><div class="ss-bni ss-bni-act"><span>🏠</span><span>Home</span></div><div class="ss-bni"><span>🗺️</span><span>Map</span></div><div class="ss-bni"><div class="ss-plus">+</div></div><div class="ss-bni"><span>🏆</span><span>Ranks</span></div><div class="ss-bni"><span>👤</span><span>Account</span></div></div>
+            </div>
+          </div>
+
+          <div class="ss-card reveal" data-screen="ranks" tabindex="0" role="button" aria-label="Open Ranks">
+            <div class="ss-phone">
+              <div class="ss-notch"></div>
+              <div class="ss-sbar"><span>9:41</span><span>▮▮▮</span></div>
+              <div class="ss-hdr">🏆 Ranks</div>
+              <div class="ss-ranks">
+                <div class="ss-rtabs"><div class="ss-rtab ss-rtab-a">Citizens</div><div class="ss-rtab">Wards</div></div>
+                <div class="ss-rtop"><div class="ss-rtop-av">SM</div><div class="ss-rtop-name">Suraj M.</div><div class="ss-rtop-pts">404 pts · 8 spots</div></div>
+                <div class="ss-rlbl">RANKINGS</div>
+                <div class="ss-rrow"><span class="ss-rn">4</span><div class="ss-rav">VA</div><span class="ss-rname">Vivek Anand</span><span class="ss-rpts">344 pts</span></div>
+                <div class="ss-rrow"><span class="ss-rn">5</span><div class="ss-rav">SP</div><span class="ss-rname">Sneha Prakash</span><span class="ss-rpts">332 pts</span></div>
+                <div class="ss-rrow"><span class="ss-rn">6</span><div class="ss-rav">MN</div><span class="ss-rname">Manoj Naik</span><span class="ss-rpts">320 pts</span></div>
+              </div>
+              <div class="ss-tap-hint">Tap to compete</div>
+              <div class="ss-bnav"><div class="ss-bni"><span>🏠</span><span>Home</span></div><div class="ss-bni"><span>🗺️</span><span>Map</span></div><div class="ss-bni"><div class="ss-plus">+</div></div><div class="ss-bni ss-bni-act"><span>🏆</span><span>Ranks</span></div><div class="ss-bni"><span>👤</span><span>Account</span></div></div>
+            </div>
+          </div>
+
+          <div class="ss-card reveal" data-screen="account" tabindex="0" role="button" aria-label="Open Account">
+            <div class="ss-phone">
+              <div class="ss-notch"></div>
+              <div class="ss-sbar"><span>9:41</span><span>▮▮▮</span></div>
+              <div class="ss-hdr">👤 Account</div>
+              <div class="ss-acct">
+                <div class="ss-prof-card">
+                  <div class="ss-prof-top"><div class="ss-prof-av">SM</div><div><div class="ss-prof-name">Suraj M.</div><div class="ss-prof-email">suraj.m@spottix.in</div><div class="ss-prof-pills"><span class="ss-pill">⭐ 404 pts</span><span class="ss-pill">🔥 3d streak</span></div></div></div>
+                  <div class="ss-prof-stats"><div class="ss-ps"><div class="ss-psv">8</div><div class="ss-psl">Reported</div></div><div class="ss-ps"><div class="ss-psv">2</div><div class="ss-psl">Resolved</div></div><div class="ss-ps"><div class="ss-psv">#1</div><div class="ss-psl">Rank</div></div></div>
+                </div>
+                <div class="ss-mitem"><div class="ss-mico">🌐</div><div class="ss-minfo"><div class="ss-mt">Language</div><div class="ss-ms">App display language</div></div><div class="ss-ma">›</div></div>
+                <div class="ss-mitem"><div class="ss-mico">🔔</div><div class="ss-minfo"><div class="ss-mt">Notifications</div><div class="ss-ms">Push and email alerts</div></div><div class="ss-ma">›</div></div>
+                <div class="ss-mitem"><div class="ss-mico">🛡️</div><div class="ss-minfo"><div class="ss-mt">Privacy</div><div class="ss-ms">Data controls</div></div><div class="ss-ma">›</div></div>
+              </div>
+              <div class="ss-tap-hint">Tap to manage</div>
+              <div class="ss-bnav"><div class="ss-bni"><span>🏠</span><span>Home</span></div><div class="ss-bni"><span>🗺️</span><span>Map</span></div><div class="ss-bni"><div class="ss-plus">+</div></div><div class="ss-bni"><span>🏆</span><span>Ranks</span></div><div class="ss-bni ss-bni-act"><span>👤</span><span>Account</span></div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <button class="ss-arrow ss-next" id="ssNext" aria-label="Next">&#8250;</button>
+    </div>
+    <div class="ss-dots-row" id="ssDots">
+      <span class="ss-dot-btn active"></span>
+      <span class="ss-dot-btn"></span>
+      <span class="ss-dot-btn"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMMUNITY + TESTIMONIALS ROW ===== -->
+<section class="two-col-section" id="community">
+  <div class="page-container">
+    <div class="two-col-grid">
+      <div class="two-col-left">
+        <h2 class="sec-title reveal">Our Amazing <span class="green-text">Community</span></h2>
+        <div class="community-box reveal">
+          <div class="comm-avatars">
+            <div class="cv ca1">RK</div>
+            <div class="cv ca2">AS</div>
+            <div class="cv ca3">PM</div>
+            <div class="cv ca4">VK</div>
+            <div class="cv ca5">NR</div>
+            <div class="cv ca6">ST</div>
+          </div>
+          <p class="comm-text">Join 2,000+ citizens who are actively making Bengaluru cleaner every day.</p>
+          <a href="#download" class="btn-join">Join the Movement</a>
+        </div>
+      </div>
+      <div class="two-col-right">
+        <h2 class="sec-title reveal">What <span class="green-text">People</span> Say</h2>
+        <div class="testi-grid">
+          <div class="testi-card reveal"><div class="tstars">★★★★☆</div><p>"Finally an app that actually makes a difference. Let's build a better tomorrow together."</p><div class="tauthor">– Rakesh N.</div></div>
+          <div class="testi-card reveal"><div class="tstars">★★★★★</div><p>"Love the live tracking feature. Super easy to use!"</p><div class="tauthor">– Ananya S.</div></div>
+          <div class="testi-card reveal"><div class="tstars">★★★★★</div><p>"Proud to be a part of such an impactful community."</p><div class="tauthor">– Vivek P.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DOWNLOAD ===== -->
+<section class="download-section" id="download">
+  <div class="page-container">
+    <div class="dl-hero">
+      <!-- Left: text + buttons -->
+      <div class="dl-text reveal">
+        <h2 class="dl-heading">Download <span class="green-text">Spottix</span></h2>
+        <p class="dl-tagline">Report. Track. <span class="green-text">Improve your city.</span></p>
+        <p class="dl-desc">Get the Spottix app and start making<br>a real difference in your community.</p>
+        <div class="dl-store-btns">
+          <a href="#" class="dl-btn" aria-label="Get it on Google Play">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M3.18 23.76c.3.17.64.24.98.21l13.3-13.3-2.97-2.97-11.31 16.06zm16.71-8.42l-2.57-1.48-2.97 2.97 2.97 2.97 2.6-1.5c.74-.43.74-1.53-.03-1.96zM.34 1.1C.13 1.4 0 1.79 0 2.28v19.44c0 .49.13.88.34 1.18l.07.07L10.61 12.9v-.24L.41 1.03l-.07.07zm11.45 12.07l2.97-2.97-2.97-2.97L8.82 10.2v3.6l2.97 2.97z"/></svg>
+            <div><small>GET IT ON</small><strong>Google Play</strong></div>
+          </a>
+          <a href="#" class="dl-btn" aria-label="Download on the App Store">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.22.15-2.22 1.3-2.2 3.88.03 3.02 2.65 4.03 2.68 4.04zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            <div><small>Download on the</small><strong>App Store</strong></div>
+          </a>
+        </div>
+        <div class="apk-row">
+          <span>Also available as APK</span>
+          <a href="#" class="btn-apk">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Download APK
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: QR card -->
+      <div class="dl-qr-wrap reveal" style="grid-column:2">
+        <div class="dl-qr-card">
+          <div class="dl-qr-img-wrap">
+            <img
+              src="assets/qr_code_real.png"
+              alt="Scan to Download Spottix App"
+              class="dl-qr-img"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+            />
+            <!-- Fallback inline QR if image missing -->
+            <svg style="display:none" width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+              <rect width="150" height="150" fill="white"/>
+              <g fill="#000">
+                <!-- Top-left finder -->
+                <rect x="10" y="10" width="40" height="40"/><rect x="16" y="16" width="28" height="28" fill="white"/><rect x="22" y="22" width="16" height="16"/>
+                <!-- Top-right finder -->
+                <rect x="100" y="10" width="40" height="40"/><rect x="106" y="16" width="28" height="28" fill="white"/><rect x="112" y="22" width="16" height="16"/>
+                <!-- Bottom-left finder -->
+                <rect x="10" y="100" width="40" height="40"/><rect x="16" y="106" width="28" height="28" fill="white"/><rect x="22" y="112" width="16" height="16"/>
+                <!-- Timing patterns -->
+                <rect x="60" y="10" width="6" height="6"/><rect x="72" y="10" width="6" height="6"/><rect x="84" y="10" width="6" height="6"/>
+                <rect x="10" y="60" width="6" height="6"/><rect x="10" y="72" width="6" height="6"/><rect x="10" y="84" width="6" height="6"/>
+                <!-- Data modules (simplified pattern) -->
+                <rect x="60" y="60" width="6" height="6"/><rect x="72" y="60" width="6" height="6"/><rect x="84" y="60" width="6" height="6"/>
+                <rect x="60" y="72" width="6" height="6"/><rect x="84" y="72" width="6" height="6"/>
+                <rect x="60" y="84" width="6" height="6"/><rect x="72" y="84" width="6" height="6"/><rect x="84" y="84" width="6" height="6"/>
+                <rect x="96" y="60" width="6" height="6"/><rect x="108" y="72" width="6" height="6"/><rect x="96" y="84" width="6" height="6"/>
+                <rect x="120" y="60" width="6" height="6"/><rect x="120" y="84" width="6" height="6"/>
+                <rect x="60" y="96" width="6" height="6"/><rect x="84" y="96" width="6" height="6"/><rect x="108" y="96" width="6" height="6"/>
+                <rect x="72" y="108" width="6" height="6"/><rect x="96" y="108" width="6" height="6"/><rect x="120" y="108" width="6" height="6"/>
+                <rect x="60" y="120" width="6" height="6"/><rect x="72" y="120" width="6" height="6"/><rect x="96" y="120" width="6" height="6"/>
+              </g>
+            </svg>
+          </div>
+          <p class="dl-qr-label">Scan to Download App</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq-section" id="faq">
+  <div class="page-container">
+    <h2 class="sec-title sec-title-center reveal">Frequently Asked <span class="green-text">Questions</span></h2>
+    <div class="faq-two-col">
+      <div class="faq-col">
+        <div class="faq-item">
+          <button class="faq-q">How do I report a garbage spot?<span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>Open Spottix, tap Report, take a photo, allow location access, and submit. Your report goes live instantly.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">How is my report tracked?<span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>Track your report in real-time from the My Reports screen. You'll get push notifications on every update.</p></div>
+        </div>
+      </div>
+      <div class="faq-col">
+        <div class="faq-item">
+          <button class="faq-q">Is Spottix free to use?<span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>Yes! Completely free. No subscriptions, no ads, no hidden charges.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">How can I earn rewards?<span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>Every verified report earns you points. Accumulate points to earn badges and climb the leaderboard.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer" id="contact">
+  <div class="page-container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#home" class="nav-logo" style="display:inline-flex;margin-bottom:10px">
+          <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="white"/></svg></div>
+          <span class="logo-text">Spottix</span>
+        </a>
+        <p>A cleaner Bengaluru begins with you. Let's build a better tomorrow together.</p>
+        <div class="soc-links">
+          <a href="#" class="soc-link" aria-label="Facebook"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+          <a href="#" class="soc-link" aria-label="Instagram"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" class="soc-link" aria-label="X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="#" class="soc-link" aria-label="YouTube"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58a2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="#home">Home</a><a href="#features">Features</a><a href="#how-it-works">How It Works</a><a href="#community">Community</a><a href="#screenshots">Screenshots</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#faq">FAQ</a><a href="#">Privacy Policy</a><a href="#">Terms &amp; Conditions</a><a href="#">Contact Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <p class="fc-p">✉️ hello@spottix.in</p>
+        <p class="fc-p">📞 +91 98765 43210</p>
+        <p class="fc-p">📍 Bengaluru, Karnataka, India</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 Spottix. All rights reserved.</p></div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WLcE=" crossorigin=""></script>
+<script src="script.js"></script>
+</body>
+</html>
