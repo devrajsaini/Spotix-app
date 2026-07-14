@@ -56,67 +56,168 @@ document.querySelectorAll('[data-target]').forEach(el => cobs.observe(el));
 revealOnScroll(); updateActiveNav();
 
 /* ================================================================
-   CAROUSEL
+   CAROUSEL — Premium 3-up center-focus, autoplay, infinite loop
 ================================================================ */
-const ssTrack = document.getElementById('ssTrack');
-const ssDots = document.querySelectorAll('#ssDots .ss-dot-btn');
-let ssSlide = 0;
-let ssAnimating = false;
-let ssAuto;
+(function () {
+  'use strict';
 
-function ssCardW() {
-  // Each card is 100% of the overflow container, so use container width + gap
-  const overflow = ssTrack?.parentElement;
-  if (!overflow) return 300;
-  return overflow.offsetWidth + 14;
-}
-function ssVisible() {
-  return 1; // Always show exactly 1 card at a time
-}
-function ssTotalCards() { return ssTrack?.querySelectorAll('.ss-card').length || 5; }
-function ssMaxSlide() { return Math.max(0, ssTotalCards() - ssVisible()); }
+  const TOTAL    = 5;
+  const GAP      = 28;   // must match CSS gap on .ss-track
+  const AUTO_MS  = 4000;
 
-function ssGo(n, animate = true) {
-  if (!ssTrack || ssAnimating) return;
-  const max = ssMaxSlide();
-  ssSlide = ((n % (max + 1)) + (max + 1)) % (max + 1); // infinite loop
-  ssAnimating = true;
-  ssTrack.style.transition = animate ? 'transform .42s cubic-bezier(.4,0,.2,1)' : 'none';
-  ssTrack.style.transform = `translateX(-${ssSlide * ssCardW()}px)`;
-  ssDots.forEach((d, i) => { d.classList.toggle('active', i === Math.floor(ssSlide / Math.max(1, ssVisible()))); });
-  setTimeout(() => { ssAnimating = false; }, 450);
-}
+  let current   = 0;   // 0-based index of the active card
+  let autoTimer = null;
+  let dragging  = false;
+  let dragStartX = 0;
+  let animating = false;
 
-document.getElementById('ssNext')?.addEventListener('click', () => { ssGo(ssSlide + 1); ssResetAuto(); });
-document.getElementById('ssPrev')?.addEventListener('click', () => { ssGo(ssSlide - 1); ssResetAuto(); });
-ssDots.forEach((d, i) => d.addEventListener('click', () => { ssGo(i * Math.max(1, ssVisible())); ssResetAuto(); }));
+  const track    = document.getElementById('ssTrack');
+  const viewport = document.getElementById('ssViewport');
+  const prevBtn  = document.getElementById('ssPrev');
+  const nextBtn  = document.getElementById('ssNext');
+  const dotBtns  = document.querySelectorAll('#ssDots .ss-dot-btn');
+  const cards    = track ? Array.from(track.querySelectorAll('.ss-card')) : [];
 
-// Autoplay (Disabled)
-function ssStartAuto() { /* ssAuto = setInterval(()=>ssGo(ssSlide+1), 4000); */ }
-function ssStopAuto() { clearInterval(ssAuto); }
-function ssResetAuto() { /* ssStopAuto(); ssStartAuto(); */ }
-const ssSection = document.getElementById('screenshots');
-// if(ssSection){ ssSection.addEventListener('mouseenter',ssStopAuto); ssSection.addEventListener('mouseleave',ssStartAuto); }
+  if (!track || cards.length === 0) return;
 
-// Drag/swipe
-let ssDragX = 0, ssDragging = false;
-if (ssTrack) {
-  ssTrack.addEventListener('mousedown', e => { ssDragging = true; ssDragX = e.clientX; ssStopAuto(); });
-  window.addEventListener('mouseup', e => {
-    if (!ssDragging) return; ssDragging = false;
-    const diff = ssDragX - e.clientX;
-    if (Math.abs(diff) > 40) ssGo(ssSlide + (diff > 0 ? 1 : -1));
-    ssResetAuto();
+  /* ── Measure card width from the DOM ── */
+  function cardW() {
+    return cards[0].getBoundingClientRect().width || 270;
+  }
+
+  /* ── Compute how many cards are fully visible in the viewport ── */
+  function visibleCount() {
+    const vw = viewport ? viewport.getBoundingClientRect().width : window.innerWidth;
+    const cw = cardW() + GAP;
+    return Math.max(1, Math.round(vw / cw));
+  }
+
+  /* ── Offset so the active card is centered ── */
+  function offsetForIndex(idx) {
+    const vw  = viewport ? viewport.getBoundingClientRect().width : window.innerWidth;
+    const cw  = cardW();
+    // Position of left edge of card[idx]
+    const cardLeft = idx * (cw + GAP);
+    // Center it
+    return cardLeft - (vw / 2) + (cw / 2);
+  }
+
+  /* ── Apply active styles to cards ── */
+  function applyStyles(idx) {
+    cards.forEach((c, i) => {
+      c.classList.toggle('ss-active', i === idx);
+    });
+    dotBtns.forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+
+  /* ── Slide to index ── */
+  function goTo(idx, animate) {
+    if (animating && animate !== false) return;
+    // Clamp with infinite wrap
+    current = ((idx % TOTAL) + TOTAL) % TOTAL;
+    animating = true;
+
+    const offset = offsetForIndex(current);
+    track.style.transition = (animate === false)
+      ? 'none'
+      : 'transform .50s cubic-bezier(.4, 0, .2, 1)';
+    track.style.transform  = `translateX(-${Math.max(0, offset)}px)`;
+
+    applyStyles(current);
+
+    setTimeout(() => { animating = false; }, 520);
+  }
+
+  /* ── Auto-play ── */
+  function startAuto() {
+    stopAuto();
+    autoTimer = setInterval(() => goTo(current + 1, true), AUTO_MS);
+  }
+  function stopAuto() {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  }
+
+  /* ── Arrow clicks ── */
+  prevBtn?.addEventListener('click', () => { goTo(current - 1, true); startAuto(); });
+  nextBtn?.addEventListener('click', () => { goTo(current + 1, true); startAuto(); });
+
+  /* ── Dot clicks ── */
+  dotBtns.forEach((d, i) => {
+    d.addEventListener('click', () => { goTo(i, true); startAuto(); });
   });
-  ssTrack.addEventListener('touchstart', e => { ssDragX = e.touches[0].clientX; ssStopAuto(); }, { passive: true });
-  ssTrack.addEventListener('touchend', e => { const diff = ssDragX - e.changedTouches[0].clientX; if (Math.abs(diff) > 40) ssGo(ssSlide + (diff > 0 ? 1 : -1)); ssResetAuto(); });
-}
 
-// Keyboard nav for carousel
-document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowRight') ssGo(ssSlide + 1);
-  if (e.key === 'ArrowLeft') ssGo(ssSlide - 1);
-});
+  /* ── Card clicks → open modal ── */
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      if (Math.abs(dragStartX - (window._ssLastX || dragStartX)) > 6) return; // was a drag
+      openModal(card.dataset.screen || 'home');
+    });
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(card.dataset.screen || 'home'); }
+    });
+  });
+
+  /* ── Mouse drag ── */
+  track.addEventListener('mousedown', e => {
+    dragging  = true;
+    dragStartX = e.clientX;
+    window._ssLastX = e.clientX;
+    stopAuto();
+    track.style.transition = 'none';
+  });
+  window.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    window._ssLastX = e.clientX;
+  });
+  window.addEventListener('mouseup', e => {
+    if (!dragging) return;
+    dragging = false;
+    const diff = dragStartX - e.clientX;
+    if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1), true);
+    else goTo(current, true); // snap back
+    startAuto();
+  });
+
+  /* ── Touch swipe ── */
+  let touchStartX = 0;
+  track.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    stopAuto();
+  }, { passive: true });
+  track.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1), true);
+    startAuto();
+  }, { passive: true });
+
+  /* ── Pause on hover ── */
+  const section = document.getElementById('screenshots');
+  section?.addEventListener('mouseenter', stopAuto);
+  section?.addEventListener('mouseleave', startAuto);
+
+  /* ── Keyboard ── */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') { goTo(current + 1, true); startAuto(); }
+    if (e.key === 'ArrowLeft')  { goTo(current - 1, true); startAuto(); }
+  });
+
+  /* ── Recalculate on resize ── */
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => goTo(current, false), 150);
+  });
+
+  /* ── Init ── */
+  // Wait one frame for layout to settle
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      goTo(0, false);
+      startAuto();
+    });
+  });
+
+})();
 
 /* ================================================================
    MODAL SYSTEM
@@ -146,11 +247,7 @@ modalClose.addEventListener('click', closeModal);
 overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-// Make carousel cards open modal
-document.querySelectorAll('.ss-card').forEach(card => {
-  card.addEventListener('click', () => openModal(card.dataset.screen || 'home'));
-  card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(card.dataset.screen || 'home'); } });
-});
+// Card click → modal is handled inside the carousel IIFE above
 
 // Bottom nav
 spxBnav.querySelectorAll('.spx-bni').forEach(btn => {
