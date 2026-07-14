@@ -1285,7 +1285,7 @@ document.addEventListener('keydown', e => {
 
     var badge = document.getElementById('blrBadge');
     if (badge) {
-      var t = w.resolutionRate >= 80 ? 'Green (Excellent)' : w.resolutionRate >= 60 ? 'Amber (Average)' : 'Red (Needs Work)';
+      var t = w.resolutionRate >= 80 ? 'Green (Resolved)' : w.resolutionRate >= 60 ? 'Yellow (In Progress)' : 'Red (Needs Work)';
       var c = w.resolutionRate >= 80 ? 'bg' : w.resolutionRate >= 60 ? 'by' : 'br';
       badge.textContent = t;
       badge.className = 'blr-badge ' + c;
@@ -1294,10 +1294,14 @@ document.addEventListener('keydown', e => {
 
   function buildBengaluruMap() {
     if (typeof L === 'undefined') return;
-    var el = document.getElementById('bengaluruMap');
-    if (!el || el._leaflet_id) return;
+    var el = document.getElementById('bengaluru-map');
+    if (!el) return;
 
-    var map = L.map('bengaluruMap', {
+    if (window.spottixMap) {
+      window.spottixMap.remove();
+    }
+
+    window.spottixMap = L.map('bengaluru-map', {
       center: [12.9716, 77.5946],
       zoom: 11,
       minZoom: 10,
@@ -1310,7 +1314,13 @@ document.addEventListener('keydown', e => {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 19
-    }).addTo(map);
+    }).addTo(window.spottixMap);
+
+    setTimeout(function() {
+      if (window.spottixMap) {
+        window.spottixMap.invalidateSize();
+      }
+    }, 300);
 
     var geojsonLayer;
     var selectedLayer = null;
@@ -1320,15 +1330,12 @@ document.addEventListener('keydown', e => {
     }
 
     function styleFeature(f) {
-      var name = getFeatureName(f);
-      var data = getWardData(name);
-      var c = getColor(data.resolutionRate);
       return {
-        fillColor: c,
-        fillOpacity: 0.55,
-        color: '#ffffff',
-        weight: 1.5,
-        opacity: 0.8
+        fillColor: 'transparent',
+        fillOpacity: 0,
+        color: 'transparent',
+        weight: 0,
+        opacity: 0
       };
     }
 
@@ -1336,38 +1343,10 @@ document.addEventListener('keydown', e => {
       var name = getFeatureName(f);
       
       layer.on({
-        mouseover: function(e) {
-          var lyr = e.target;
-          if (lyr !== selectedLayer) {
-            lyr.setStyle({
-              fillOpacity: 0.75,
-              weight: 2.5
-            });
-          }
-        },
-        mouseout: function(e) {
-          var lyr = e.target;
-          if (lyr !== selectedLayer) {
-            geojsonLayer.resetStyle(lyr);
-          }
-        },
         click: function(e) {
           var lyr = e.target;
-          if (selectedLayer && selectedLayer !== lyr) {
-            geojsonLayer.resetStyle(selectedLayer);
-          }
           selectedLayer = lyr;
           
-          var rate = getWardData(name).resolutionRate;
-          var selectedColor = getColor(rate);
-          lyr.setStyle({
-            fillColor: selectedColor,
-            fillOpacity: 0.9,
-            weight: 3,
-            color: selectedColor
-          });
-          lyr.bringToFront();
-
           var data = getWardData(name);
           showStats(name, data);
         }
@@ -1375,30 +1354,76 @@ document.addEventListener('keydown', e => {
       layer.bindTooltip(name, { sticky: true, className: 'blr-tt' });
     }
 
-    fetch('assets/bengaluru_wards.geojson')
+    fetch('./assets/bengaluru_wards.geojson')
       .then(function(res) {
-        if (!res.ok) throw new Error("Could not load assets/bengaluru_wards.geojson");
+        if (!res.ok) throw new Error("GeoJSON failed: " + res.status);
         return res.json();
       })
       .then(function(data) {
         geojsonLayer = L.geoJSON(data, {
           style: styleFeature,
           onEachFeature: onEachFeature
-        }).addTo(map);
+        }).addTo(window.spottixMap);
 
         geojsonLayer.eachLayer(function(layer) {
           var name = getFeatureName(layer.feature);
           if (name.toLowerCase().includes('hsr')) {
-            layer.fire('click');
-            map.panTo(layer.getBounds().getCenter());
+            selectedLayer = layer;
+            var data = getWardData(name);
+            showStats(name, data);
+            window.spottixMap.panTo(layer.getBounds().getCenter());
           }
         });
       })
       .catch(function(err) {
         console.error(err);
+        var errDiv = document.createElement('div');
+        errDiv.style.cssText = 'position: absolute; top: 16px; left: 50%; transform: translateX(-50%); z-index: 1000; background: #dc2626; border: 1px solid #ef4444; color: white; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.5);';
+        errDiv.textContent = '⚠️ Failed to load ward boundaries. Base map remains active.';
+        el.appendChild(errDiv);
       });
 
+    // Add report markers
+    var reportIssues = [
+      { lat: 12.945, lng: 77.62, title: 'Overflowing Garbage Pile', location: 'Koramangala 4th Block', status: 'Needs Work', reportedTime: '2 hours ago' },
+      { lat: 12.978, lng: 77.645, title: 'Broken Streetlight', location: 'Indiranagar 100ft Road', status: 'In Progress', reportedTime: '1 day ago' },
+      { lat: 12.915, lng: 77.64, title: 'Pothole on Main Road', location: 'HSR Layout Sector 3', status: 'Resolved', reportedTime: '3 days ago' },
+      { lat: 12.98, lng: 77.745, title: 'Open Sewage Line', location: 'Whitefield Inner Circle', status: 'Needs Work', reportedTime: '5 hours ago' },
+      { lat: 13.005, lng: 77.575, title: 'Water Leakage', location: 'Malleshwaram 15th Cross', status: 'In Progress', reportedTime: 'Yesterday' },
+      { lat: 12.935, lng: 77.585, title: 'Garbage Dump near Park', location: 'Jayanagar 4th Block', status: 'Resolved', reportedTime: '2 days ago' },
+      { lat: 13.005, lng: 77.70, title: 'Sewage Overflow', location: 'K R Puram', status: 'Needs Work', reportedTime: '4 hours ago' },
+      { lat: 13.005, lng: 77.545, title: 'Damaged Footpath', location: 'Rajajinagar 3rd Stage', status: 'In Progress', reportedTime: '3 days ago' }
+    ];
 
+    var statusColors = {
+      'Needs Work': '#ef4444',
+      'In Progress': '#f59e0b',
+      'Resolved': '#22c55e'
+    };
+
+    reportIssues.forEach(function(iss) {
+      var color = statusColors[iss.status] || '#ef4444';
+      var marker = L.circleMarker([iss.lat, iss.lng], {
+        radius: 6,
+        fillColor: color,
+        fillOpacity: 0.9,
+        color: '#ffffff',
+        weight: 1.5
+      });
+
+      var popupContent = '<div class="spx-popup" style="padding: 2px;">' +
+        '<div class="spx-popup-title" style="font-weight: 700; color: #f1f5f9; margin-bottom: 4px; font-size: 13px;">' + iss.title + '</div>' +
+        '<div class="spx-popup-loc" style="font-size: 11px; color: #94a3b8; margin-bottom: 6px;">📍 ' + iss.location + '</div>' +
+        '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 10px;">' +
+          '<span class="spx-popup-status" style="font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 12px; background: ' + color + '22; color: ' + color + ';">' + iss.status + '</span>' +
+          '<span style="font-size: 10px; color: #64748b;">' + iss.reportedTime + '</span>' +
+        '</div>' +
+        '<button class="spx-popup-btn" style="width: 100%; padding: 6px; border: 1px solid rgba(34,197,94,0.3); background: rgba(34,197,94,0.08); color: #22c55e; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer;">View Report</button>' +
+      '</div>';
+
+      marker.bindPopup(popupContent, { maxWidth: 220 });
+      marker.addTo(window.spottixMap);
+    });
 
     var back = document.getElementById('blrBack');
     if (back) {
@@ -1406,20 +1431,17 @@ document.addEventListener('keydown', e => {
         document.getElementById('blrDefault').style.display = 'block';
         document.getElementById('blrStats').style.display = 'none';
         if (selectedLayer) {
-          geojsonLayer.resetStyle(selectedLayer);
           selectedLayer = null;
         }
+        window.spottixMap.closePopup();
+        window.spottixMap.setView([12.9716, 77.5946], 11);
       });
     }
 
-    [100, 300, 600, 1200].forEach(function(ms) {
-      setTimeout(function() {
-        map.invalidateSize();
-      }, ms);
-    });
-
     window.addEventListener('resize', function() {
-      map.invalidateSize();
+      if (window.spottixMap) {
+        window.spottixMap.invalidateSize();
+      }
     });
   }
 

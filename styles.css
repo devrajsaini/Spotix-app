@@ -1918,12 +1918,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   background: #141414;
 }
 
-#bengaluru-map {
-  width: 100%;
-  height: 520px;
-  background: #1a1a1a;
-  z-index: 1;
-}
+
 
 /* Legend overlay on map */
 .map-legend-overlay {
@@ -2029,11 +2024,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   }
 }
 
-@media(max-width: 480px) {
-  #bengaluru-map {
-    height: 380px;
-  }
-}
+
 
 /* ============================================================
    BENGALURU LIVE MAP SECTION
@@ -2050,7 +2041,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   border:1px solid rgba(34,197,94,.25);
   border-radius:16px;
   overflow:hidden;
-  height:580px;
+  height:600px;
   background:#0b100e;
   box-shadow:0 10px 40px rgba(34, 197, 94, 0.10);
 }
@@ -2058,11 +2049,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* Map box */
 .blr-map-box{
   position:relative;
-  height:580px;
+  height:600px;
 }
-#bengaluruMap{
+#bengaluru-map{
   width:100%;
-  height:580px;
+  height:600px;
   display:block;
   z-index:1;
 }
@@ -2232,13 +2223,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 /* Responsive */
 @media(max-width:1024px){
-  .blr-layout{grid-template-columns:1fr;height:auto}
-  .blr-map-box,#bengaluruMap{height:480px}
-  .blr-side-panel{border-left:none;border-top:1px solid rgba(255,255,255,.06);height:auto;max-height:380px}
+  .blr-layout{grid-template-columns:1fr 280px;height:500px}
+  .blr-map-box,#bengaluru-map{height:500px}
+  .blr-side-panel{border-left:1px solid rgba(255,255,255,.06);border-top:none;height:100%;max-height:none;padding:20px 16px}
 }
 @media(max-width:767px){
-  .blr-map-box,#bengaluruMap{height:380px}
-  .blr-side-panel{max-height:340px;padding:20px 18px}
+  .blr-layout{grid-template-columns:1fr;height:auto}
+  .blr-map-box,#bengaluru-map{height:420px}
+  .blr-side-panel{border-left:none;border-top:1px solid rgba(255,255,255,.06);height:auto;max-height:none;padding:20px 18px}
   .blr-map-legend{bottom:10px;left:10px;padding:8px 12px}
   .blr-map-legend .blr-leg-item{font-size:.7rem}
 }
