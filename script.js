@@ -4,182 +4,183 @@
 ============================================================ */
 
 /* ── Existing site logic ── */
-const navbar    = document.getElementById('navbar');
+const navbar = document.getElementById('navbar');
 const hamburger = document.getElementById('hamburger');
-const navLinks  = document.getElementById('navLinks');
-const navItems  = document.querySelectorAll('.nav-link');
-const sections  = document.querySelectorAll('section[id],footer[id]');
+const navLinks = document.getElementById('navLinks');
+const navItems = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('section[id],footer[id]');
 const revealEls = document.querySelectorAll('.reveal');
 
-window.addEventListener('scroll', onScroll, {passive:true});
-function onScroll(){
+window.addEventListener('scroll', onScroll, { passive: true });
+function onScroll() {
   navbar.classList.toggle('scrolled', window.scrollY > 20);
   updateActiveNav();
   revealOnScroll();
 }
-hamburger.addEventListener('click', ()=>{
+hamburger.addEventListener('click', () => {
   const o = hamburger.classList.toggle('open');
   navLinks.classList.toggle('open', o);
 });
-navItems.forEach(l => l.addEventListener('click', ()=>{ hamburger.classList.remove('open'); navLinks.classList.remove('open'); }));
-document.addEventListener('click', e=>{ if(!navbar.contains(e.target)){ hamburger.classList.remove('open'); navLinks.classList.remove('open'); } });
+navItems.forEach(l => l.addEventListener('click', () => { hamburger.classList.remove('open'); navLinks.classList.remove('open'); }));
+document.addEventListener('click', e => { if (!navbar.contains(e.target)) { hamburger.classList.remove('open'); navLinks.classList.remove('open'); } });
 document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', function(e){
-    const id = this.getAttribute('href'); if(id==='#') return;
-    const t = document.querySelector(id); if(!t) return;
+  a.addEventListener('click', function (e) {
+    const id = this.getAttribute('href'); if (id === '#') return;
+    const t = document.querySelector(id); if (!t) return;
     e.preventDefault();
-    window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - navbar.offsetHeight - 6, behavior:'smooth' });
+    window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - navbar.offsetHeight - 6, behavior: 'smooth' });
   });
 });
-function updateActiveNav(){
-  const y = window.scrollY + navbar.offsetHeight + 40; let cur='';
-  sections.forEach(s=>{ if(y>=s.offsetTop) cur=s.id; });
-  navItems.forEach(l=> l.classList.toggle('active', l.getAttribute('href').slice(1)===cur));
+function updateActiveNav() {
+  const y = window.scrollY + navbar.offsetHeight + 40; let cur = '';
+  sections.forEach(s => { if (y >= s.offsetTop) cur = s.id; });
+  navItems.forEach(l => l.classList.toggle('active', l.getAttribute('href').slice(1) === cur));
 }
-document.querySelectorAll('.problem-grid,.testi-grid,.steps-row').forEach(g=>{
-  g.querySelectorAll('.reveal').forEach((el,i)=>{ el.style.transitionDelay=`${i*75}ms`; });
+document.querySelectorAll('.problem-grid,.testi-grid,.steps-row').forEach(g => {
+  g.querySelectorAll('.reveal').forEach((el, i) => { el.style.transitionDelay = `${i * 75}ms`; });
 });
-function revealOnScroll(){
-  const vh=window.innerHeight;
-  revealEls.forEach(el=>{ if(el.getBoundingClientRect().top < vh-48) el.classList.add('visible'); });
+function revealOnScroll() {
+  const vh = window.innerHeight;
+  revealEls.forEach(el => { if (el.getBoundingClientRect().top < vh - 48) el.classList.add('visible'); });
 }
-document.querySelectorAll('.faq-item').forEach(item=>{
-  item.querySelector('.faq-q').addEventListener('click',()=>{
-    const open=item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
-    if(!open) item.classList.add('open');
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.querySelector('.faq-q').addEventListener('click', () => {
+    const open = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!open) item.classList.add('open');
   });
 });
-function animCount(el){ const t=parseInt(el.dataset.target,10); if(isNaN(t)) return; const d=2000,t0=performance.now(); (function tick(now){ const p=Math.min((now-t0)/d,1); el.textContent=Math.round((1-Math.pow(1-p,3))*t).toLocaleString('en-IN'); if(p<1) requestAnimationFrame(tick); else el.textContent=t.toLocaleString('en-IN'); })(t0); }
-const cobs=new IntersectionObserver(en=>{ en.forEach(e=>{ if(e.isIntersecting){ animCount(e.target); cobs.unobserve(e.target); } }); },{threshold:.5});
-document.querySelectorAll('[data-target]').forEach(el=>cobs.observe(el));
+function animCount(el) { const t = parseInt(el.dataset.target, 10); if (isNaN(t)) return; const d = 2000, t0 = performance.now(); (function tick(now) { const p = Math.min((now - t0) / d, 1); el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * t).toLocaleString('en-IN'); if (p < 1) requestAnimationFrame(tick); else el.textContent = t.toLocaleString('en-IN'); })(t0); }
+const cobs = new IntersectionObserver(en => { en.forEach(e => { if (e.isIntersecting) { animCount(e.target); cobs.unobserve(e.target); } }); }, { threshold: .5 });
+document.querySelectorAll('[data-target]').forEach(el => cobs.observe(el));
 revealOnScroll(); updateActiveNav();
 
 /* ================================================================
    CAROUSEL
 ================================================================ */
-const ssTrack  = document.getElementById('ssTrack');
-const ssDots   = document.querySelectorAll('#ssDots .ss-dot-btn');
-let ssSlide    = 0;
-let ssAnimating= false;
+const ssTrack = document.getElementById('ssTrack');
+const ssDots = document.querySelectorAll('#ssDots .ss-dot-btn');
+let ssSlide = 0;
+let ssAnimating = false;
 let ssAuto;
 
-function ssCardW(){
-  const c = ssTrack?.querySelector('.ss-card'); if(!c) return 170;
-  return c.getBoundingClientRect().width + 14;
+function ssCardW() {
+  // Each card is 100% of the overflow container, so use container width + gap
+  const overflow = ssTrack?.parentElement;
+  if (!overflow) return 300;
+  return overflow.offsetWidth + 14;
 }
-function ssVisible(){
-  if(!ssTrack) return 5;
-  return Math.max(1, Math.floor(ssTrack.parentElement.offsetWidth / ssCardW()));
+function ssVisible() {
+  return 1; // Always show exactly 1 card at a time
 }
-function ssTotalCards(){ return ssTrack?.querySelectorAll('.ss-card').length || 5; }
-function ssMaxSlide(){ return Math.max(0, ssTotalCards() - ssVisible()); }
+function ssTotalCards() { return ssTrack?.querySelectorAll('.ss-card').length || 5; }
+function ssMaxSlide() { return Math.max(0, ssTotalCards() - ssVisible()); }
 
-function ssGo(n, animate=true){
-  if(!ssTrack || ssAnimating) return;
+function ssGo(n, animate = true) {
+  if (!ssTrack || ssAnimating) return;
   const max = ssMaxSlide();
-  ssSlide = ((n % (max+1)) + (max+1)) % (max+1); // infinite loop
+  ssSlide = ((n % (max + 1)) + (max + 1)) % (max + 1); // infinite loop
   ssAnimating = true;
   ssTrack.style.transition = animate ? 'transform .42s cubic-bezier(.4,0,.2,1)' : 'none';
-  ssTrack.style.transform  = `translateX(-${ssSlide * ssCardW()}px)`;
-  ssDots.forEach((d,i)=>{ d.classList.toggle('active', i === Math.floor(ssSlide / Math.max(1,ssVisible()))); });
-  setTimeout(()=>{ ssAnimating=false; }, 450);
+  ssTrack.style.transform = `translateX(-${ssSlide * ssCardW()}px)`;
+  ssDots.forEach((d, i) => { d.classList.toggle('active', i === Math.floor(ssSlide / Math.max(1, ssVisible()))); });
+  setTimeout(() => { ssAnimating = false; }, 450);
 }
 
-document.getElementById('ssNext')?.addEventListener('click',()=>{ ssGo(ssSlide+1); ssResetAuto(); });
-document.getElementById('ssPrev')?.addEventListener('click',()=>{ ssGo(ssSlide-1); ssResetAuto(); });
-ssDots.forEach((d,i)=>d.addEventListener('click',()=>{ ssGo(i*Math.max(1,ssVisible())); ssResetAuto(); }));
+document.getElementById('ssNext')?.addEventListener('click', () => { ssGo(ssSlide + 1); ssResetAuto(); });
+document.getElementById('ssPrev')?.addEventListener('click', () => { ssGo(ssSlide - 1); ssResetAuto(); });
+ssDots.forEach((d, i) => d.addEventListener('click', () => { ssGo(i * Math.max(1, ssVisible())); ssResetAuto(); }));
 
 // Autoplay (Disabled)
-function ssStartAuto(){ /* ssAuto = setInterval(()=>ssGo(ssSlide+1), 4000); */ }
-function ssStopAuto(){ clearInterval(ssAuto); }
-function ssResetAuto(){ /* ssStopAuto(); ssStartAuto(); */ }
+function ssStartAuto() { /* ssAuto = setInterval(()=>ssGo(ssSlide+1), 4000); */ }
+function ssStopAuto() { clearInterval(ssAuto); }
+function ssResetAuto() { /* ssStopAuto(); ssStartAuto(); */ }
 const ssSection = document.getElementById('screenshots');
 // if(ssSection){ ssSection.addEventListener('mouseenter',ssStopAuto); ssSection.addEventListener('mouseleave',ssStartAuto); }
 
 // Drag/swipe
-let ssDragX=0, ssDragging=false;
-if(ssTrack){
-  ssTrack.addEventListener('mousedown', e=>{ ssDragging=true; ssDragX=e.clientX; ssStopAuto(); });
-  window.addEventListener('mouseup', e=>{
-    if(!ssDragging) return; ssDragging=false;
+let ssDragX = 0, ssDragging = false;
+if (ssTrack) {
+  ssTrack.addEventListener('mousedown', e => { ssDragging = true; ssDragX = e.clientX; ssStopAuto(); });
+  window.addEventListener('mouseup', e => {
+    if (!ssDragging) return; ssDragging = false;
     const diff = ssDragX - e.clientX;
-    if(Math.abs(diff) > 40) ssGo(ssSlide + (diff > 0 ? 1 : -1));
+    if (Math.abs(diff) > 40) ssGo(ssSlide + (diff > 0 ? 1 : -1));
     ssResetAuto();
   });
-  ssTrack.addEventListener('touchstart', e=>{ ssDragX=e.touches[0].clientX; ssStopAuto(); }, {passive:true});
-  ssTrack.addEventListener('touchend',   e=>{ const diff=ssDragX-e.changedTouches[0].clientX; if(Math.abs(diff)>40) ssGo(ssSlide+(diff>0?1:-1)); ssResetAuto(); });
+  ssTrack.addEventListener('touchstart', e => { ssDragX = e.touches[0].clientX; ssStopAuto(); }, { passive: true });
+  ssTrack.addEventListener('touchend', e => { const diff = ssDragX - e.changedTouches[0].clientX; if (Math.abs(diff) > 40) ssGo(ssSlide + (diff > 0 ? 1 : -1)); ssResetAuto(); });
 }
 
 // Keyboard nav for carousel
-document.addEventListener('keydown', e=>{
-  if(e.key==='ArrowRight') ssGo(ssSlide+1);
-  if(e.key==='ArrowLeft')  ssGo(ssSlide-1);
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') ssGo(ssSlide + 1);
+  if (e.key === 'ArrowLeft') ssGo(ssSlide - 1);
 });
 
 /* ================================================================
    MODAL SYSTEM
 ================================================================ */
-const overlay   = document.getElementById('spxModalOverlay');
-const modalClose= document.getElementById('spxModalClose');
+const overlay = document.getElementById('spxModalOverlay');
+const modalClose = document.getElementById('spxModalClose');
 const spxScreen = document.getElementById('spxScreen');
-const spxBnav   = document.getElementById('spxBnav');
-let leafletMap  = null;
+const spxBnav = document.getElementById('spxBnav');
+let leafletMap = null;
 let currentScreen = 'home';
 
-function openModal(screen){
+function openModal(screen) {
   currentScreen = screen;
   overlay.classList.add('spx-open');
   document.body.style.overflow = 'hidden';
   renderScreen(screen);
   setActiveBnav(screen);
-  if(screen==='map') setTimeout(initLeafletMap, 120);
+  if (screen === 'map') setTimeout(initLeafletMap, 120);
 }
-function closeModal(){
+function closeModal() {
   overlay.classList.remove('spx-open');
   document.body.style.overflow = '';
-  if(leafletMap){ leafletMap.remove(); leafletMap=null; }
+  if (leafletMap) { leafletMap.remove(); leafletMap = null; }
 }
 
 modalClose.addEventListener('click', closeModal);
-overlay.addEventListener('click', e=>{ if(e.target===overlay) closeModal(); });
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 // Make carousel cards open modal
-document.querySelectorAll('.ss-card').forEach(card=>{
-  card.addEventListener('click', ()=> openModal(card.dataset.screen||'home'));
-  card.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openModal(card.dataset.screen||'home'); } });
+document.querySelectorAll('.ss-card').forEach(card => {
+  card.addEventListener('click', () => openModal(card.dataset.screen || 'home'));
+  card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(card.dataset.screen || 'home'); } });
 });
 
 // Bottom nav
-spxBnav.querySelectorAll('.spx-bni').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
+spxBnav.querySelectorAll('.spx-bni').forEach(btn => {
+  btn.addEventListener('click', () => {
     const sc = btn.dataset.screen;
-    if(!sc) return;
-    currentScreen=sc; renderScreen(sc); setActiveBnav(sc);
-    if(sc==='map') setTimeout(initLeafletMap,120);
-    else if(leafletMap){ leafletMap.remove(); leafletMap=null; }
+    if (!sc) return;
+    currentScreen = sc; renderScreen(sc); setActiveBnav(sc);
+    if (sc === 'map') setTimeout(initLeafletMap, 120);
+    else if (leafletMap) { leafletMap.remove(); leafletMap = null; }
   });
 });
 
-function setActiveBnav(screen){
-  spxBnav.querySelectorAll('.spx-bni').forEach(b=>{ b.classList.toggle('spx-active', b.dataset.screen===screen); });
+function setActiveBnav(screen) {
+  spxBnav.querySelectorAll('.spx-bni').forEach(b => { b.classList.toggle('spx-active', b.dataset.screen === screen); });
 }
 
 /* ================================================================
    SCREEN RENDERERS
 ================================================================ */
-function renderScreen(screen){
-  if(screen==='map'){      spxScreen.innerHTML = renderMap(); return; }
-  if(screen==='report'){   spxScreen.innerHTML = renderReport(); bindReport(); return; }
-  if(screen==='myreports'){spxScreen.innerHTML = renderMyReports(); bindMyReports(); return; }
-  if(screen==='ranks'){    spxScreen.innerHTML = renderRanks(); bindRanks(); return; }
-  if(screen==='account'){  spxScreen.innerHTML = renderAccount(); bindAccount(); return; }
+function renderScreen(screen) {
+  if (screen === 'map') { spxScreen.innerHTML = renderMap(); return; }
+  if (screen === 'report') { spxScreen.innerHTML = renderReport(); bindReport(); return; }
+  if (screen === 'myreports') { spxScreen.innerHTML = renderMyReports(); bindMyReports(); return; }
+  if (screen === 'ranks') { spxScreen.innerHTML = renderRanks(); bindRanks(); return; }
+  if (screen === 'account') { spxScreen.innerHTML = renderAccount(); bindAccount(); return; }
   spxScreen.innerHTML = renderHome(); bindHome();
 }
 
 /* ── HOME ── */
-function renderHome(){
+function renderHome() {
   return `<div class="spx-scr">
     <div class="spx-scr-body">
       <div style="padding:14px 14px 0">
@@ -196,9 +197,9 @@ function renderHome(){
           <div class="spx-home-action" onclick="switchTo('ranks')"><div class="spx-home-action-ico">🏆</div><div><div class="spx-home-action-name">Ranks</div><div class="spx-home-action-sub">Leaderboard</div></div></div>
         </div>
         <div class="spx-home-rec-title">Recent Reports <span class="spx-home-rec-all" onclick="switchTo('myreports')">View All</span></div>
-        ${getAllReports().slice(0,3).map(r=>`
+        ${getAllReports().slice(0, 3).map(r => `
           <div class="spx-home-rec-item">
-            <div class="spx-home-rec-thumb" style="background:${r.color||'#1a2a1a'}"></div>
+            <div class="spx-home-rec-thumb" style="background:${r.color || '#1a2a1a'}"></div>
             <div class="spx-home-rec-info"><div class="spx-home-rec-name">${r.title}</div><div class="spx-home-rec-loc">📍 ${r.loc}</div></div>
             <span class="spx-home-rec-badge ${statusClass(r.status)}">${r.status}</span>
           </div>`).join('')}
@@ -206,69 +207,69 @@ function renderHome(){
     </div>
   </div>`;
 }
-function bindHome(){
-  spxScreen.querySelectorAll('[onclick]').forEach(el=>{ const fn=el.getAttribute('onclick'); el.removeAttribute('onclick'); el.addEventListener('click',()=>eval(fn)); });
+function bindHome() {
+  spxScreen.querySelectorAll('[onclick]').forEach(el => { const fn = el.getAttribute('onclick'); el.removeAttribute('onclick'); el.addEventListener('click', () => eval(fn)); });
 }
 
 /* ── MAP ── */
-function renderMap(){
+function renderMap() {
   return `<div id="spxMapContainer" style="width:100%;height:100%;min-height:520px"></div>`;
 }
-function initLeafletMap(){
-  if(leafletMap) return;
-  const el = document.getElementById('spxMapContainer'); if(!el) return;
-  leafletMap = L.map('spxMapContainer',{zoomControl:true,attributionControl:false}).setView([12.9716,77.5946],12);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18}).addTo(leafletMap);
+function initLeafletMap() {
+  if (leafletMap) return;
+  const el = document.getElementById('spxMapContainer'); if (!el) return;
+  leafletMap = L.map('spxMapContainer', { zoomControl: true, attributionControl: false }).setView([12.9716, 77.5946], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(leafletMap);
   const issues = [
-    {lat:12.9716,lng:77.5946,title:'Garbage on MG Road',loc:'MG Road, Bengaluru',status:'In Progress',cat:'Garbage'},
-    {lat:12.9279,lng:77.6271,title:'Pothole on HSR Layout',loc:'HSR Layout, Bengaluru',status:'Pending',cat:'Road Damage'},
-    {lat:12.9850,lng:77.5533,title:'Broken Streetlight',loc:'Indiranagar, Bengaluru',status:'Resolved',cat:'Street Light'},
-    {lat:12.9539,lng:77.4960,title:'Water Leakage',loc:'Rajajinagar, Bengaluru',status:'In Progress',cat:'Water Issue'},
-    {lat:12.9200,lng:77.6239,title:'Overflowing Dustbin',loc:'Koramangala, Bengaluru',status:'Resolved',cat:'Garbage'},
-    {lat:13.0100,lng:77.5800,title:'Sewage Overflow',loc:'Hebbal, Bengaluru',status:'Pending',cat:'Sewage'},
-    {lat:12.9400,lng:77.6100,title:'Public Property Damage',loc:'BTM Layout, Bengaluru',status:'In Progress',cat:'Public Property'},
+    { lat: 12.9716, lng: 77.5946, title: 'Garbage on MG Road', loc: 'MG Road, Bengaluru', status: 'In Progress', cat: 'Garbage' },
+    { lat: 12.9279, lng: 77.6271, title: 'Pothole on HSR Layout', loc: 'HSR Layout, Bengaluru', status: 'Pending', cat: 'Road Damage' },
+    { lat: 12.9850, lng: 77.5533, title: 'Broken Streetlight', loc: 'Indiranagar, Bengaluru', status: 'Resolved', cat: 'Street Light' },
+    { lat: 12.9539, lng: 77.4960, title: 'Water Leakage', loc: 'Rajajinagar, Bengaluru', status: 'In Progress', cat: 'Water Issue' },
+    { lat: 12.9200, lng: 77.6239, title: 'Overflowing Dustbin', loc: 'Koramangala, Bengaluru', status: 'Resolved', cat: 'Garbage' },
+    { lat: 13.0100, lng: 77.5800, title: 'Sewage Overflow', loc: 'Hebbal, Bengaluru', status: 'Pending', cat: 'Sewage' },
+    { lat: 12.9400, lng: 77.6100, title: 'Public Property Damage', loc: 'BTM Layout, Bengaluru', status: 'In Progress', cat: 'Public Property' },
   ];
-  const colors = {'Resolved':'#22c55e','In Progress':'#fbbf24','Pending':'#818cf8'};
-  issues.forEach(iss=>{
-    const col = colors[iss.status]||'#22c55e';
-    const icon = L.divIcon({className:'',html:`<div style="width:16px;height:16px;background:${col};border-radius:50%;border:3px solid white;box-shadow:0 0 8px ${col}55;position:relative"><div style="position:absolute;inset:-5px;border-radius:50%;border:2px solid ${col};animation:mpulse 1.8s ease-out infinite;opacity:.5"></div></div>`,iconSize:[16,16],iconAnchor:[8,8]});
-    const marker = L.marker([iss.lat,iss.lng],{icon});
-    marker.addTo(leafletMap).bindPopup(`<div class="spx-popup"><div class="spx-popup-title">${iss.title}</div><div class="spx-popup-loc">📍 ${iss.loc}</div><span class="spx-popup-status" style="background:${col}22;color:${col}">${iss.status}</span><br><button class="spx-popup-btn" onclick="switchTo('report')">+ Report Similar</button></div>`,{maxWidth:220,className:''});
+  const colors = { 'Resolved': '#22c55e', 'In Progress': '#fbbf24', 'Pending': '#818cf8' };
+  issues.forEach(iss => {
+    const col = colors[iss.status] || '#22c55e';
+    const icon = L.divIcon({ className: '', html: `<div style="width:16px;height:16px;background:${col};border-radius:50%;border:3px solid white;box-shadow:0 0 8px ${col}55;position:relative"><div style="position:absolute;inset:-5px;border-radius:50%;border:2px solid ${col};animation:mpulse 1.8s ease-out infinite;opacity:.5"></div></div>`, iconSize: [16, 16], iconAnchor: [8, 8] });
+    const marker = L.marker([iss.lat, iss.lng], { icon });
+    marker.addTo(leafletMap).bindPopup(`<div class="spx-popup"><div class="spx-popup-title">${iss.title}</div><div class="spx-popup-loc">📍 ${iss.loc}</div><span class="spx-popup-status" style="background:${col}22;color:${col}">${iss.status}</span><br><button class="spx-popup-btn" onclick="switchTo('report')">+ Report Similar</button></div>`, { maxWidth: 220, className: '' });
   });
 }
 
 /* ── REPORT ── */
 let selectedCat = null;
-let reportStep  = 1;
-function renderReport(){
+let reportStep = 1;
+function renderReport() {
   return `<div class="spx-scr">
     <div class="spx-scr-head">
       <span class="spx-scr-title">📷 Report a Spot</span>
       <span style="font-size:.7rem;color:var(--t2)">Step <span id="spxStepNum">1</span>/2</span>
     </div>
     <div class="spx-scr-body" id="spxReportBody">
-      ${reportStep===1 ? renderReportStep1() : renderReportStep2()}
+      ${reportStep === 1 ? renderReportStep1() : renderReportStep2()}
     </div>
   </div>`;
 }
-function renderReportStep1(){
-  const cats=[
-    {icon:'🗑️',label:'Garbage',cls:'c-g'},{icon:'💧',label:'Sewage',cls:'c-o'},
-    {icon:'🔧',label:'Road Damage',cls:'c-r'},{icon:'💡',label:'Street Light',cls:'c-p'},
-    {icon:'🌊',label:'Water Issue',cls:'c-y'},{icon:'🏛️',label:'Public Property',cls:'c-b'}
+function renderReportStep1() {
+  const cats = [
+    { icon: '🗑️', label: 'Garbage', cls: 'c-g' }, { icon: '💧', label: 'Sewage', cls: 'c-o' },
+    { icon: '🔧', label: 'Road Damage', cls: 'c-r' }, { icon: '💡', label: 'Street Light', cls: 'c-p' },
+    { icon: '🌊', label: 'Water Issue', cls: 'c-y' }, { icon: '🏛️', label: 'Public Property', cls: 'c-b' }
   ];
   return `<div>
     <p style="font-size:.8rem;color:var(--t2);margin-bottom:12px">Pick a category for the issue</p>
-    <div class="spx-cats-grid">${cats.map(c=>`
-      <button class="spx-cat-btn ${c.cls}${selectedCat===c.label?' spx-cat-sel':''}" data-cat="${c.label}">
+    <div class="spx-cats-grid">${cats.map(c => `
+      <button class="spx-cat-btn ${c.cls}${selectedCat === c.label ? ' spx-cat-sel' : ''}" data-cat="${c.label}">
         <span class="spx-cat-ico">${c.icon}</span>
         <span class="spx-cat-lbl">${c.label}</span>
       </button>`).join('')}
     </div>
-    <button class="spx-btn-primary" id="spxContinueBtn" ${!selectedCat?'disabled':''}>Continue →</button>
+    <button class="spx-btn-primary" id="spxContinueBtn" ${!selectedCat ? 'disabled' : ''}>Continue →</button>
   </div>`;
 }
-function renderReportStep2(){
+function renderReportStep2() {
   return `<div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
       <button class="spx-back-btn" id="spxBackBtn">← Back</button>
@@ -288,72 +289,72 @@ function renderReportStep2(){
     <button class="spx-btn-primary" id="spxSubmitBtn">🚀 Submit Report</button>
   </div>`;
 }
-function bindReport(){
+function bindReport() {
   reportStep = 1; selectedCat = null;
   const body = document.getElementById('spxReportBody');
-  function rebind(){
-    body.querySelectorAll('.spx-cat-btn').forEach(btn=>{
-      btn.addEventListener('click',()=>{
+  function rebind() {
+    body.querySelectorAll('.spx-cat-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
         selectedCat = btn.dataset.cat;
-        body.querySelectorAll('.spx-cat-btn').forEach(b=>b.classList.remove('spx-cat-sel'));
+        body.querySelectorAll('.spx-cat-btn').forEach(b => b.classList.remove('spx-cat-sel'));
         btn.classList.add('spx-cat-sel');
         const continueBtn = body.querySelector('#spxContinueBtn');
-        if(continueBtn) continueBtn.disabled = false;
+        if (continueBtn) continueBtn.disabled = false;
       });
     });
-    body.querySelector('#spxContinueBtn')?.addEventListener('click',()=>{
-      if(!selectedCat) return;
-      reportStep=2; body.innerHTML=renderReportStep2(); bindStep2();
-      document.getElementById('spxStepNum').textContent='2';
+    body.querySelector('#spxContinueBtn')?.addEventListener('click', () => {
+      if (!selectedCat) return;
+      reportStep = 2; body.innerHTML = renderReportStep2(); bindStep2();
+      document.getElementById('spxStepNum').textContent = '2';
     });
   }
   rebind();
-  function bindStep2(){
-    document.getElementById('spxBackBtn')?.addEventListener('click',()=>{ reportStep=1; body.innerHTML=renderReportStep1(); rebind(); document.getElementById('spxStepNum').textContent='1'; });
-    document.getElementById('spxFileInput')?.addEventListener('change',e=>{
-      const file=e.target.files[0]; if(!file) return;
-      const reader=new FileReader();
-      reader.onload=ev=>{ const img=document.getElementById('spxUploadPreview'); if(img){ img.src=ev.target.result; img.style.display='block'; } };
+  function bindStep2() {
+    document.getElementById('spxBackBtn')?.addEventListener('click', () => { reportStep = 1; body.innerHTML = renderReportStep1(); rebind(); document.getElementById('spxStepNum').textContent = '1'; });
+    document.getElementById('spxFileInput')?.addEventListener('change', e => {
+      const file = e.target.files[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => { const img = document.getElementById('spxUploadPreview'); if (img) { img.src = ev.target.result; img.style.display = 'block'; } };
       reader.readAsDataURL(file);
     });
-    document.getElementById('spxSubmitBtn')?.addEventListener('click',()=>{
-      const loc=document.getElementById('spxLocInput')?.value||'Bengaluru';
-      const desc=document.getElementById('spxDescInput')?.value||'';
-      if(!loc.trim()){ alert('Please enter a location.'); return; }
-      const report={ id:Date.now(), title:`${selectedCat} Issue`, loc:loc.trim()||'Bengaluru', desc, status:'Pending', date:new Date().toLocaleDateString('en-IN'), cat:selectedCat, color:catColor(selectedCat) };
-      const saved=JSON.parse(localStorage.getItem('spx_reports')||'[]');
-      saved.unshift(report); localStorage.setItem('spx_reports',JSON.stringify(saved));
-      body.innerHTML=`<div class="spx-success">
+    document.getElementById('spxSubmitBtn')?.addEventListener('click', () => {
+      const loc = document.getElementById('spxLocInput')?.value || 'Bengaluru';
+      const desc = document.getElementById('spxDescInput')?.value || '';
+      if (!loc.trim()) { alert('Please enter a location.'); return; }
+      const report = { id: Date.now(), title: `${selectedCat} Issue`, loc: loc.trim() || 'Bengaluru', desc, status: 'Pending', date: new Date().toLocaleDateString('en-IN'), cat: selectedCat, color: catColor(selectedCat) };
+      const saved = JSON.parse(localStorage.getItem('spx_reports') || '[]');
+      saved.unshift(report); localStorage.setItem('spx_reports', JSON.stringify(saved));
+      body.innerHTML = `<div class="spx-success">
         <div class="spx-success-check">✅</div>
         <div class="spx-success-title">Report Submitted!</div>
         <div class="spx-success-sub">Your ${selectedCat} issue has been reported.<br>Authorities will review it soon.</div>
         <div class="spx-success-pts">+10 Points Earned 🎉</div>
         <button class="spx-btn-primary" style="margin-top:8px" onclick="switchTo('myreports')">View My Reports</button>
       </div>`;
-      body.querySelector('button')?.addEventListener('click',()=>switchTo('myreports'));
-      reportStep=1; selectedCat=null;
+      body.querySelector('button')?.addEventListener('click', () => switchTo('myreports'));
+      reportStep = 1; selectedCat = null;
     });
   }
 }
 
 /* ── MY REPORTS ── */
-const sampleReports=[
-  {id:1,title:'Garbage on roadside',loc:'Koramangala, Bengaluru',status:'Resolved',date:'12 Jun 2025',cat:'Garbage',color:'#854d0e'},
-  {id:2,title:'Overflowing dustbin',loc:'HSR Layout, Bengaluru',status:'In Progress',date:'10 Jun 2025',cat:'Garbage',color:'#713f12'},
-  {id:3,title:'Broken streetlight',loc:'Indiranagar, Bengaluru',status:'Resolved',date:'08 Jun 2025',cat:'Street Light',color:'#1e3a5f'},
-  {id:4,title:'Water leakage',loc:'Jayanagar, Bengaluru',status:'Pending',date:'05 Jun 2025',cat:'Water Issue',color:'#1e40af'},
+const sampleReports = [
+  { id: 1, title: 'Garbage on roadside', loc: 'Koramangala, Bengaluru', status: 'Resolved', date: '12 Jun 2025', cat: 'Garbage', color: '#854d0e' },
+  { id: 2, title: 'Overflowing dustbin', loc: 'HSR Layout, Bengaluru', status: 'In Progress', date: '10 Jun 2025', cat: 'Garbage', color: '#713f12' },
+  { id: 3, title: 'Broken streetlight', loc: 'Indiranagar, Bengaluru', status: 'Resolved', date: '08 Jun 2025', cat: 'Street Light', color: '#1e3a5f' },
+  { id: 4, title: 'Water leakage', loc: 'Jayanagar, Bengaluru', status: 'Pending', date: '05 Jun 2025', cat: 'Water Issue', color: '#1e40af' },
 ];
-function getAllReports(){
-  const saved=JSON.parse(localStorage.getItem('spx_reports')||'[]');
-  return [...saved,...sampleReports];
+function getAllReports() {
+  const saved = JSON.parse(localStorage.getItem('spx_reports') || '[]');
+  return [...saved, ...sampleReports];
 }
-function statusClass(s){ return s==='Resolved'?'badge-ok':s==='In Progress'?'badge-ip':'badge-pend'; }
-function catColor(c){ const m={'Garbage':'#854d0e','Sewage':'#065f46','Road Damage':'#7c2d12','Street Light':'#1e3a5f','Water Issue':'#1e40af','Public Property':'#4c1d95'}; return m[c]||'#1a2a1a'; }
-function renderMyReports(){
-  const all=getAllReports();
+function statusClass(s) { return s === 'Resolved' ? 'badge-ok' : s === 'In Progress' ? 'badge-ip' : 'badge-pend'; }
+function catColor(c) { const m = { 'Garbage': '#854d0e', 'Sewage': '#065f46', 'Road Damage': '#7c2d12', 'Street Light': '#1e3a5f', 'Water Issue': '#1e40af', 'Public Property': '#4c1d95' }; return m[c] || '#1a2a1a'; }
+function renderMyReports() {
+  const all = getAllReports();
   return `<div class="spx-scr" style="position:relative">
     <div class="spx-scr-head"><span class="spx-scr-title">📋 My Reports</span><span style="font-size:.75rem;color:var(--g)">${all.length} total</span></div>
-    <div class="spx-scr-body" id="spxRepList">${all.map(r=>`
+    <div class="spx-scr-body" id="spxRepList">${all.map(r => `
       <div class="spx-report-card" data-id="${r.id}">
         <div class="spx-rc-top">
           <div class="spx-rc-title">${r.title}</div>
@@ -366,48 +367,48 @@ function renderMyReports(){
     <div class="spx-detail-overlay" id="spxDetailOverlay"></div>
   </div>`;
 }
-function bindMyReports(){
-  const all=getAllReports();
-  document.querySelectorAll('.spx-report-card').forEach(card=>{
-    card.addEventListener('click',()=>{
-      const id=parseInt(card.dataset.id);
-      const r=all.find(x=>x.id===id)||all[0];
-      const ov=document.getElementById('spxDetailOverlay');
-      ov.innerHTML=`<div class="spx-detail-head">
+function bindMyReports() {
+  const all = getAllReports();
+  document.querySelectorAll('.spx-report-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = parseInt(card.dataset.id);
+      const r = all.find(x => x.id === id) || all[0];
+      const ov = document.getElementById('spxDetailOverlay');
+      ov.innerHTML = `<div class="spx-detail-head">
         <button class="spx-detail-back" id="spxDetailClose">←</button>
         <span class="spx-detail-head-title">${r.title}</span>
       </div>
       <div class="spx-detail-body">
-        <div class="spx-detail-img" style="background:${r.color||'#1a2a1a'}">${r.cat==='Garbage'?'🗑️':r.cat==='Street Light'?'💡':r.cat==='Water Issue'?'💧':'🔧'}</div>
+        <div class="spx-detail-img" style="background:${r.color || '#1a2a1a'}">${r.cat === 'Garbage' ? '🗑️' : r.cat === 'Street Light' ? '💡' : r.cat === 'Water Issue' ? '💧' : '🔧'}</div>
         <div class="spx-detail-row"><span class="spx-detail-key">Category</span><span class="spx-detail-val">${r.cat}</span></div>
         <div class="spx-detail-row"><span class="spx-detail-key">Location</span><span class="spx-detail-val">${r.loc}</span></div>
-        <div class="spx-detail-row"><span class="spx-detail-key">Status</span><span class="spx-detail-val" style="color:${r.status==='Resolved'?'#22c55e':r.status==='In Progress'?'#fbbf24':'#818cf8'}">${r.status}</span></div>
+        <div class="spx-detail-row"><span class="spx-detail-key">Status</span><span class="spx-detail-val" style="color:${r.status === 'Resolved' ? '#22c55e' : r.status === 'In Progress' ? '#fbbf24' : '#818cf8'}">${r.status}</span></div>
         <div class="spx-detail-row"><span class="spx-detail-key">Date Filed</span><span class="spx-detail-val">${r.date}</span></div>
-        ${r.desc?`<div class="spx-detail-row"><span class="spx-detail-key">Description</span><span class="spx-detail-val" style="text-align:right;max-width:60%">${r.desc}</span></div>`:''}
+        ${r.desc ? `<div class="spx-detail-row"><span class="spx-detail-key">Description</span><span class="spx-detail-val" style="text-align:right;max-width:60%">${r.desc}</span></div>` : ''}
       </div>`;
-      setTimeout(()=>ov.classList.add('spx-detail-open'),10);
-      document.getElementById('spxDetailClose')?.addEventListener('click',()=>ov.classList.remove('spx-detail-open'));
+      setTimeout(() => ov.classList.add('spx-detail-open'), 10);
+      document.getElementById('spxDetailClose')?.addEventListener('click', () => ov.classList.remove('spx-detail-open'));
     });
   });
 }
 
 /* ── RANKS ── */
-const citizensData=[
-  {rank:1,init:'SM',name:'Suraj M.',pts:404,spots:8,col:'linear-gradient(135deg,#22c55e,#16a34a)',isMe:true},
-  {rank:2,init:'RK',name:'Rahul Kumar',pts:380,spots:7,col:'linear-gradient(135deg,#3b82f6,#1d4ed8)'},
-  {rank:3,init:'PA',name:'Priya Anand',pts:345,spots:6,col:'linear-gradient(135deg,#f59e0b,#d97706)'},
-  {rank:4,init:'VA',name:'Vivek Anand',pts:344,spots:6,col:'linear-gradient(135deg,#8b5cf6,#7c3aed)'},
-  {rank:5,init:'SP',name:'Sneha Prakash',pts:332,spots:5,col:'linear-gradient(135deg,#ef4444,#dc2626)'},
-  {rank:6,init:'MN',name:'Manoj Naik',pts:320,spots:5,col:'linear-gradient(135deg,#06b6d4,#0891b2)'},
+const citizensData = [
+  { rank: 1, init: 'SM', name: 'Suraj M.', pts: 404, spots: 8, col: 'linear-gradient(135deg,#22c55e,#16a34a)', isMe: true },
+  { rank: 2, init: 'RK', name: 'Rahul Kumar', pts: 380, spots: 7, col: 'linear-gradient(135deg,#3b82f6,#1d4ed8)' },
+  { rank: 3, init: 'PA', name: 'Priya Anand', pts: 345, spots: 6, col: 'linear-gradient(135deg,#f59e0b,#d97706)' },
+  { rank: 4, init: 'VA', name: 'Vivek Anand', pts: 344, spots: 6, col: 'linear-gradient(135deg,#8b5cf6,#7c3aed)' },
+  { rank: 5, init: 'SP', name: 'Sneha Prakash', pts: 332, spots: 5, col: 'linear-gradient(135deg,#ef4444,#dc2626)' },
+  { rank: 6, init: 'MN', name: 'Manoj Naik', pts: 320, spots: 5, col: 'linear-gradient(135deg,#06b6d4,#0891b2)' },
 ];
-const wardsData=[
-  {rank:1,init:'K',name:'Koramangala',pts:2840,spots:54,col:'linear-gradient(135deg,#22c55e,#16a34a)'},
-  {rank:2,init:'H',name:'HSR Layout',pts:2410,spots:46,col:'linear-gradient(135deg,#3b82f6,#1d4ed8)'},
-  {rank:3,init:'I',name:'Indiranagar',pts:2200,spots:42,col:'linear-gradient(135deg,#f59e0b,#d97706)'},
-  {rank:4,init:'J',name:'Jayanagar',pts:2050,spots:39,col:'linear-gradient(135deg,#8b5cf6,#7c3aed)'},
+const wardsData = [
+  { rank: 1, init: 'K', name: 'Koramangala', pts: 2840, spots: 54, col: 'linear-gradient(135deg,#22c55e,#16a34a)' },
+  { rank: 2, init: 'H', name: 'HSR Layout', pts: 2410, spots: 46, col: 'linear-gradient(135deg,#3b82f6,#1d4ed8)' },
+  { rank: 3, init: 'I', name: 'Indiranagar', pts: 2200, spots: 42, col: 'linear-gradient(135deg,#f59e0b,#d97706)' },
+  { rank: 4, init: 'J', name: 'Jayanagar', pts: 2050, spots: 39, col: 'linear-gradient(135deg,#8b5cf6,#7c3aed)' },
 ];
-function renderRanksList(data){
-  const top=data[0];
+function renderRanksList(data) {
+  const top = data[0];
   return `<div class="spx-rank-top">
     <div style="position:relative;width:fit-content;margin:0 auto">
       <div class="spx-rank-av" style="background:${top.col}">${top.init}</div>
@@ -415,18 +416,18 @@ function renderRanksList(data){
     </div>
     <div class="spx-rank-name">${top.name}</div>
     <div class="spx-rank-pts-big">${top.pts} pts · ${top.spots} spots</div>
-    ${top.isMe?'<div style="font-size:.65rem;color:var(--g);margin-top:3px">That\'s you! 🎉</div>':''}
+    ${top.isMe ? '<div style="font-size:.65rem;color:var(--g);margin-top:3px">That\'s you! 🎉</div>' : ''}
   </div>
   <div class="spx-rank-list-title">Rankings</div>
-  ${data.slice(1).map(r=>`
-    <div class="spx-rank-row${r.isMe?' spx-my-rank':''}">
+  ${data.slice(1).map(r => `
+    <div class="spx-rank-row${r.isMe ? ' spx-my-rank' : ''}">
       <div class="spx-rank-num">${r.rank}</div>
       <div class="spx-rank-user-av" style="background:${r.col}">${r.init}</div>
-      <div class="spx-rank-user-name">${r.name}${r.isMe?' <span style="color:var(--g);font-size:.6rem">(You)</span>':''}</div>
+      <div class="spx-rank-user-name">${r.name}${r.isMe ? ' <span style="color:var(--g);font-size:.6rem">(You)</span>' : ''}</div>
       <div class="spx-rank-user-pts">${r.pts} pts</div>
     </div>`).join('')}`;
 }
-function renderRanks(){
+function renderRanks() {
   return `<div class="spx-scr">
     <div class="spx-scr-head"><span class="spx-scr-title">🏆 Ranks</span></div>
     <div class="spx-scr-body">
@@ -439,24 +440,24 @@ function renderRanks(){
     </div>
   </div>`;
 }
-function bindRanks(){
-  document.querySelectorAll('.spx-tab').forEach(tab=>{
-    tab.addEventListener('click',()=>{
-      document.querySelectorAll('.spx-tab').forEach(t=>t.classList.remove('spx-tab-a'));
+function bindRanks() {
+  document.querySelectorAll('.spx-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.spx-tab').forEach(t => t.classList.remove('spx-tab-a'));
       tab.classList.add('spx-tab-a');
-      const id=tab.dataset.tab;
-      document.querySelectorAll('.spx-tab-content').forEach(c=>c.classList.remove('spx-tc-active'));
-      document.getElementById(id==='citizens'?'spxTabCitizens':'spxTabWards')?.classList.add('spx-tc-active');
+      const id = tab.dataset.tab;
+      document.querySelectorAll('.spx-tab-content').forEach(c => c.classList.remove('spx-tc-active'));
+      document.getElementById(id === 'citizens' ? 'spxTabCitizens' : 'spxTabWards')?.classList.add('spx-tc-active');
     });
   });
 }
 
 /* ── ACCOUNT ── */
-const notifSettings = JSON.parse(localStorage.getItem('spx_notif')||'{"push":true,"email":false}');
-const privSettings  = JSON.parse(localStorage.getItem('spx_priv') ||'{"anon":true,"loc":true}');
-function saveNotif(){ localStorage.setItem('spx_notif',JSON.stringify(notifSettings)); }
-function savePriv(){  localStorage.setItem('spx_priv', JSON.stringify(privSettings));  }
-function renderAccount(){
+const notifSettings = JSON.parse(localStorage.getItem('spx_notif') || '{"push":true,"email":false}');
+const privSettings = JSON.parse(localStorage.getItem('spx_priv') || '{"anon":true,"loc":true}');
+function saveNotif() { localStorage.setItem('spx_notif', JSON.stringify(notifSettings)); }
+function savePriv() { localStorage.setItem('spx_priv', JSON.stringify(privSettings)); }
+function renderAccount() {
   return `<div class="spx-scr" style="position:relative">
     <div class="spx-scr-head"><span class="spx-scr-title">👤 Account</span></div>
     <div class="spx-scr-body">
@@ -510,53 +511,53 @@ function renderAccount(){
     <div id="spxHelpPanel" class="spx-settings-panel"></div>
   </div>`;
 }
-function openPanel(panelId, content){
-  const panel=document.getElementById(panelId); if(!panel) return;
-  panel.innerHTML=content; setTimeout(()=>panel.classList.add('spx-panel-open'),10);
-  panel.querySelector('.spx-detail-back')?.addEventListener('click',()=>panel.classList.remove('spx-panel-open'));
+function openPanel(panelId, content) {
+  const panel = document.getElementById(panelId); if (!panel) return;
+  panel.innerHTML = content; setTimeout(() => panel.classList.add('spx-panel-open'), 10);
+  panel.querySelector('.spx-detail-back')?.addEventListener('click', () => panel.classList.remove('spx-panel-open'));
 }
-function bindAccount(){
-  document.getElementById('spxLangRow')?.addEventListener('click',()=>{
-    const langs=[{flag:'🇮🇳',name:'English',sel:true},{flag:'🇮🇳',name:'Kannada'},{flag:'🇮🇳',name:'Hindi'},{flag:'🇮🇳',name:'Tamil'},{flag:'🇮🇳',name:'Telugu'}];
-    openPanel('spxLangPanel',`<div class="spx-panel-head"><button class="spx-detail-back">←</button><span class="spx-panel-title">Language</span></div>
-      <div class="spx-panel-body">${langs.map(l=>`<div class="spx-lang-option${l.sel?' spx-lang-sel':''}" style="cursor:pointer"><span class="spx-lang-flag">${l.flag}</span><span class="spx-lang-name">${l.name}</span><span class="spx-lang-check">✓</span></div>`).join('')}</div>`);
-    document.querySelectorAll('.spx-lang-option').forEach(o=>{ o.addEventListener('click',()=>{ document.querySelectorAll('.spx-lang-option').forEach(x=>x.classList.remove('spx-lang-sel')); o.classList.add('spx-lang-sel'); }); });
+function bindAccount() {
+  document.getElementById('spxLangRow')?.addEventListener('click', () => {
+    const langs = [{ flag: '🇮🇳', name: 'English', sel: true }, { flag: '🇮🇳', name: 'Kannada' }, { flag: '🇮🇳', name: 'Hindi' }, { flag: '🇮🇳', name: 'Tamil' }, { flag: '🇮🇳', name: 'Telugu' }];
+    openPanel('spxLangPanel', `<div class="spx-panel-head"><button class="spx-detail-back">←</button><span class="spx-panel-title">Language</span></div>
+      <div class="spx-panel-body">${langs.map(l => `<div class="spx-lang-option${l.sel ? ' spx-lang-sel' : ''}" style="cursor:pointer"><span class="spx-lang-flag">${l.flag}</span><span class="spx-lang-name">${l.name}</span><span class="spx-lang-check">✓</span></div>`).join('')}</div>`);
+    document.querySelectorAll('.spx-lang-option').forEach(o => { o.addEventListener('click', () => { document.querySelectorAll('.spx-lang-option').forEach(x => x.classList.remove('spx-lang-sel')); o.classList.add('spx-lang-sel'); }); });
   });
-  document.getElementById('spxNotifRow')?.addEventListener('click',()=>{
-    openPanel('spxNotifPanel',`<div class="spx-panel-head"><button class="spx-detail-back">←</button><span class="spx-panel-title">Notifications</span></div>
+  document.getElementById('spxNotifRow')?.addEventListener('click', () => {
+    openPanel('spxNotifPanel', `<div class="spx-panel-head"><button class="spx-detail-back">←</button><span class="spx-panel-title">Notifications</span></div>
       <div class="spx-panel-body">
-        <div class="spx-setting-row"><div class="spx-setting-ico">📲</div><div class="spx-setting-info"><div class="spx-setting-title">Push Notifications</div><div class="spx-setting-sub">Report status updates</div></div><label class="spx-toggle"><input type="checkbox" id="spxPushTgl" ${notifSettings.push?'checked':''}><div class="spx-toggle-slider"></div></label></div>
-        <div class="spx-setting-row"><div class="spx-setting-ico">✉️</div><div class="spx-setting-info"><div class="spx-setting-title">Email Alerts</div><div class="spx-setting-sub">Weekly digest of your reports</div></div><label class="spx-toggle"><input type="checkbox" id="spxEmailTgl" ${notifSettings.email?'checked':''}><div class="spx-toggle-slider"></div></label></div>
+        <div class="spx-setting-row"><div class="spx-setting-ico">📲</div><div class="spx-setting-info"><div class="spx-setting-title">Push Notifications</div><div class="spx-setting-sub">Report status updates</div></div><label class="spx-toggle"><input type="checkbox" id="spxPushTgl" ${notifSettings.push ? 'checked' : ''}><div class="spx-toggle-slider"></div></label></div>
+        <div class="spx-setting-row"><div class="spx-setting-ico">✉️</div><div class="spx-setting-info"><div class="spx-setting-title">Email Alerts</div><div class="spx-setting-sub">Weekly digest of your reports</div></div><label class="spx-toggle"><input type="checkbox" id="spxEmailTgl" ${notifSettings.email ? 'checked' : ''}><div class="spx-toggle-slider"></div></label></div>
       </div>`);
-    document.getElementById('spxPushTgl')?.addEventListener('change',e=>{ notifSettings.push=e.target.checked; saveNotif(); });
-    document.getElementById('spxEmailTgl')?.addEventListener('change',e=>{ notifSettings.email=e.target.checked; saveNotif(); });
+    document.getElementById('spxPushTgl')?.addEventListener('change', e => { notifSettings.push = e.target.checked; saveNotif(); });
+    document.getElementById('spxEmailTgl')?.addEventListener('change', e => { notifSettings.email = e.target.checked; saveNotif(); });
   });
-  document.getElementById('spxPrivRow')?.addEventListener('click',()=>{
-    openPanel('spxPrivPanel',`<div class="spx-panel-head"><button class="spx-detail-back">←</button><span class="spx-panel-title">Privacy</span></div>
+  document.getElementById('spxPrivRow')?.addEventListener('click', () => {
+    openPanel('spxPrivPanel', `<div class="spx-panel-head"><button class="spx-detail-back">←</button><span class="spx-panel-title">Privacy</span></div>
       <div class="spx-panel-body">
-        <div class="spx-setting-row"><div class="spx-setting-ico">🕵️</div><div class="spx-setting-info"><div class="spx-setting-title">Anonymous Posting</div><div class="spx-setting-sub">Hide name on public reports</div></div><label class="spx-toggle"><input type="checkbox" id="spxAnonTgl" ${privSettings.anon?'checked':''}><div class="spx-toggle-slider"></div></label></div>
-        <div class="spx-setting-row"><div class="spx-setting-ico">📍</div><div class="spx-setting-info"><div class="spx-setting-title">Location Access</div><div class="spx-setting-sub">Auto-detect report location</div></div><label class="spx-toggle"><input type="checkbox" id="spxLocTgl" ${privSettings.loc?'checked':''}><div class="spx-toggle-slider"></div></label></div>
+        <div class="spx-setting-row"><div class="spx-setting-ico">🕵️</div><div class="spx-setting-info"><div class="spx-setting-title">Anonymous Posting</div><div class="spx-setting-sub">Hide name on public reports</div></div><label class="spx-toggle"><input type="checkbox" id="spxAnonTgl" ${privSettings.anon ? 'checked' : ''}><div class="spx-toggle-slider"></div></label></div>
+        <div class="spx-setting-row"><div class="spx-setting-ico">📍</div><div class="spx-setting-info"><div class="spx-setting-title">Location Access</div><div class="spx-setting-sub">Auto-detect report location</div></div><label class="spx-toggle"><input type="checkbox" id="spxLocTgl" ${privSettings.loc ? 'checked' : ''}><div class="spx-toggle-slider"></div></label></div>
       </div>`);
-    document.getElementById('spxAnonTgl')?.addEventListener('change',e=>{ privSettings.anon=e.target.checked; savePriv(); });
-    document.getElementById('spxLocTgl')?.addEventListener('change',e=>{ privSettings.loc=e.target.checked; savePriv(); });
+    document.getElementById('spxAnonTgl')?.addEventListener('change', e => { privSettings.anon = e.target.checked; savePriv(); });
+    document.getElementById('spxLocTgl')?.addEventListener('change', e => { privSettings.loc = e.target.checked; savePriv(); });
   });
-  document.getElementById('spxHelpRow')?.addEventListener('click',()=>{
-    openPanel('spxHelpPanel',`<div class="spx-panel-head"><button class="spx-detail-back">←</button><span class="spx-panel-title">Help Centre</span></div>
+  document.getElementById('spxHelpRow')?.addEventListener('click', () => {
+    openPanel('spxHelpPanel', `<div class="spx-panel-head"><button class="spx-detail-back">←</button><span class="spx-panel-title">Help Centre</span></div>
       <div class="spx-panel-body">
-        ${[['How do I report?','Tap the + button, select a category, upload a photo, confirm location and submit.'],['How is my report tracked?','Visit My Reports to see real-time status updates.'],['When will my issue be resolved?','Most issues are resolved within 3–7 business days.'],['How do I earn points?','Every verified report earns 10 points. Referrals earn 25 points.']].map(([q,a])=>`<div class="spx-setting-row" style="cursor:default;flex-direction:column;align-items:flex-start;gap:6px"><div style="font-size:.8rem;font-weight:700;color:var(--t1)">${q}</div><div style="font-size:.75rem;color:var(--t2);line-height:1.5">${a}</div></div>`).join('')}
+        ${[['How do I report?', 'Tap the + button, select a category, upload a photo, confirm location and submit.'], ['How is my report tracked?', 'Visit My Reports to see real-time status updates.'], ['When will my issue be resolved?', 'Most issues are resolved within 3–7 business days.'], ['How do I earn points?', 'Every verified report earns 10 points. Referrals earn 25 points.']].map(([q, a]) => `<div class="spx-setting-row" style="cursor:default;flex-direction:column;align-items:flex-start;gap:6px"><div style="font-size:.8rem;font-weight:700;color:var(--t1)">${q}</div><div style="font-size:.75rem;color:var(--t2);line-height:1.5">${a}</div></div>`).join('')}
       </div>`);
   });
 }
 
 /* ── Global helper to switch screen from inline onclick ── */
-window.switchTo = function(screen){
-  currentScreen=screen; renderScreen(screen); setActiveBnav(screen);
-  if(screen==='map') setTimeout(initLeafletMap,120);
-  else if(leafletMap){ leafletMap.remove(); leafletMap=null; }
+window.switchTo = function (screen) {
+  currentScreen = screen; renderScreen(screen); setActiveBnav(screen);
+  if (screen === 'map') setTimeout(initLeafletMap, 120);
+  else if (leafletMap) { leafletMap.remove(); leafletMap = null; }
 };
 
 /* ── Update clock every minute ── */
-function updateClock(){ const t=document.getElementById('spxTime'); if(t){ const n=new Date(); t.textContent=`${n.getHours()}:${String(n.getMinutes()).padStart(2,'0')}`; } }
+function updateClock() { const t = document.getElementById('spxTime'); if (t) { const n = new Date(); t.textContent = `${n.getHours()}:${String(n.getMinutes()).padStart(2, '0')}`; } }
 setInterval(updateClock, 60000); updateClock();
 
 /* ============================================================
@@ -605,12 +606,12 @@ setInterval(updateClock, 60000); updateClock();
   });
 
   /* ── Mobile swipe carousel ── */
-  const row     = document.getElementById('featsRow');
-  const dotEls  = document.querySelectorAll('#featsDots .feats-dot');
+  const row = document.getElementById('featsRow');
+  const dotEls = document.querySelectorAll('#featsDots .feats-dot');
   const prevBtn = document.getElementById('featsPrev');
   const nextBtn = document.getElementById('featsNext');
-  let featSlide    = 0;
-  let featDragX    = 0;
+  let featSlide = 0;
+  let featDragX = 0;
   let featDragging = false;
 
   function isMobile() { return window.innerWidth < 769; }
@@ -627,7 +628,7 @@ setInterval(updateClock, 60000); updateClock();
     if (!row || !isMobile()) return;
     const max = featCount() - 1;
     featSlide = Math.min(Math.max(((n % featCount()) + featCount()) % featCount(), 0), max);
-    row.style.transform  = `translateX(-${featSlide * featCardW()}px)`;
+    row.style.transform = `translateX(-${featSlide * featCardW()}px)`;
     row.style.transition = 'transform .4s cubic-bezier(.4,0,.2,1)';
     dotEls.forEach((d, i) => d.classList.toggle('active', i === featSlide));
   }
@@ -657,7 +658,7 @@ setInterval(updateClock, 60000); updateClock();
   /* Reset on resize */
   window.addEventListener('resize', () => {
     if (!isMobile() && row) {
-      row.style.transform  = '';
+      row.style.transform = '';
       row.style.transition = '';
       featSlide = 0;
       dotEls.forEach((d, i) => d.classList.toggle('active', i === 0));
@@ -667,164 +668,38 @@ setInterval(updateClock, 60000); updateClock();
   });
 
 })();
-
-/* ================================================================
-   LEAFLET BENGALURU WARD MAP
-================================================================ */
-document.addEventListener('DOMContentLoaded', () => {
-  const mapEl = document.getElementById('blrMap');
-  if (!mapEl) return;
-
-  // Initialize Map
-  const map = L.map('blrMap', {
-    zoomControl: true,
-    scrollWheelZoom: false
-  }).setView([12.9716, 77.5946], 11);
-
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-    subdomains: 'abcd',
-    maxZoom: 19
-  }).addTo(map);
-
-  function getColor(rate) {
-    if (rate >= 80) return '#22c55e'; // Green
-    if (rate >= 60) return '#f59e0b'; // Yellow/Orange
-    return '#ef4444';                 // Red
-  }
-
-  function getStatusBadge(rate) {
-    if (rate >= 80) return { text: 'Green (Excellent)', class: 'badge-green' };
-    if (rate >= 60) return { text: 'Average', class: 'badge-yellow' };
-    return { text: 'Needs Attention', class: 'badge-red' };
-  }
-
-  let geojsonLayer;
-
-  // Load GeoJSON data
-  fetch('assets/bengaluru_wards.geojson')
-    .then(res => res.json())
-    .then(data => {
-      geojsonLayer = L.geoJSON(data, {
-        style: function(feature) {
-          const rate = feature.properties.resolutionRate || 0;
-          return {
-            fillColor: getColor(rate),
-            weight: 1,
-            opacity: 1,
-            color: 'rgba(255,255,255,0.4)',
-            fillOpacity: 0.6
-          };
-        },
-        onEachFeature: function(feature, layer) {
-          // Hover effects
-          layer.on('mouseover', function(e) {
-            const l = e.target;
-            l.setStyle({
-              weight: 2,
-              color: '#ffffff',
-              fillOpacity: 0.8
-            });
-            l.bringToFront();
-            if(l._path) l._path.style.cursor = 'pointer';
-          });
-          
-          layer.on('mouseout', function(e) {
-            geojsonLayer.resetStyle(e.target);
-          });
-
-          // Click behavior
-          layer.on('click', function(e) {
-            const props = feature.properties;
-            
-            // Hide default panel, show stats panel
-            const defaultPanel = document.getElementById('blrPanelDefault');
-            const statsPanel = document.getElementById('blrWardStats');
-            if(defaultPanel) defaultPanel.style.display = 'none';
-            if(statsPanel) statsPanel.style.display = 'flex';
-
-            // Update details
-            const nameEl = document.getElementById('blrWardName');
-            if(nameEl) nameEl.textContent = props.name;
-            
-            const badge = getStatusBadge(props.resolutionRate);
-            const badgeEl = document.getElementById('blrStatsBadge');
-            if(badgeEl) {
-              badgeEl.textContent = badge.text;
-              badgeEl.className = 'blr-stats-badge ' + badge.class;
-            }
-            
-            const ratePctEl = document.getElementById('blrRatePct');
-            if(ratePctEl) ratePctEl.textContent = props.resolutionRate + '%';
-            
-            const bar = document.getElementById('blrRateBar');
-            if(bar) {
-              bar.style.width = props.resolutionRate + '%';
-              bar.style.backgroundColor = getColor(props.resolutionRate);
-            }
-
-            const activeEl = document.getElementById('blrActive');
-            if(activeEl) activeEl.textContent = props.active;
-            
-            const resolvedEl = document.getElementById('blrResolved');
-            if(resolvedEl) resolvedEl.textContent = props.resolved;
-          });
-        }
-      }).addTo(map);
-
-      // Fit map to polygons
-      map.fitBounds(geojsonLayer.getBounds());
-    })
-    .catch(err => console.error("Error loading GeoJSON:", err));
-
-  // Invalidate size on section visible and resize
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        setTimeout(() => map.invalidateSize(), 100);
-      }
-    });
-  });
-  
-  const section = document.getElementById('problem');
-  if (section) observer.observe(section);
-  
-  window.addEventListener('resize', () => {
-    map.invalidateSize();
-  });
-});
 /* ============================================================
    COMMUNITY MODAL
 ============================================================ */
 
 const commOverlay = document.getElementById('commModalOverlay');
-const commBody    = document.getElementById('commModalBody');
-const commClose   = document.getElementById('commModalClose');
+const commBody = document.getElementById('commModalBody');
+const commClose = document.getElementById('commModalClose');
 
 /* Cleanup events data */
 const COMM_EVENTS = [
-  { id:'ev1', name:'Koramangala Clean Drive', loc:'4th Block, Koramangala', date:'Sat, 19 Jul 2025', time:'7:00 AM', count:38, icon:'🌿' },
-  { id:'ev2', name:'HSR Lake Cleanup',        loc:'HSR Layout, Bengaluru',  date:'Sun, 20 Jul 2025', time:'6:30 AM', count:24, icon:'💧' },
-  { id:'ev3', name:'Indiranagar Ward Drive',   loc:'Indiranagar 100ft Road', date:'Sat, 26 Jul 2025', time:'8:00 AM', count:51, icon:'🏙️' },
+  { id: 'ev1', name: 'Koramangala Clean Drive', loc: '4th Block, Koramangala', date: 'Sat, 19 Jul 2025', time: '7:00 AM', count: 38, icon: '🌿' },
+  { id: 'ev2', name: 'HSR Lake Cleanup', loc: 'HSR Layout, Bengaluru', date: 'Sun, 20 Jul 2025', time: '6:30 AM', count: 24, icon: '💧' },
+  { id: 'ev3', name: 'Indiranagar Ward Drive', loc: 'Indiranagar 100ft Road', date: 'Sat, 26 Jul 2025', time: '8:00 AM', count: 51, icon: '🏙️' },
 ];
 
 const VOLUNTEERS = [
-  {init:'RK',col:'linear-gradient(135deg,#22c55e,#16a34a)',name:'Rahul K.'},
-  {init:'AS',col:'linear-gradient(135deg,#3b82f6,#1d4ed8)',name:'Ananya S.'},
-  {init:'PM',col:'linear-gradient(135deg,#f59e0b,#d97706)',name:'Priya M.'},
-  {init:'VK',col:'linear-gradient(135deg,#8b5cf6,#7c3aed)',name:'Vivek K.'},
-  {init:'NR',col:'linear-gradient(135deg,#ef4444,#dc2626)',name:'Neha R.'},
-  {init:'ST',col:'linear-gradient(135deg,#06b6d4,#0891b2)',name:'Suresh T.'},
-  {init:'SM',col:'linear-gradient(135deg,#22c55e,#059669)',name:'Suraj M.'},
+  { init: 'RK', col: 'linear-gradient(135deg,#22c55e,#16a34a)', name: 'Rahul K.' },
+  { init: 'AS', col: 'linear-gradient(135deg,#3b82f6,#1d4ed8)', name: 'Ananya S.' },
+  { init: 'PM', col: 'linear-gradient(135deg,#f59e0b,#d97706)', name: 'Priya M.' },
+  { init: 'VK', col: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', name: 'Vivek K.' },
+  { init: 'NR', col: 'linear-gradient(135deg,#ef4444,#dc2626)', name: 'Neha R.' },
+  { init: 'ST', col: 'linear-gradient(135deg,#06b6d4,#0891b2)', name: 'Suresh T.' },
+  { init: 'SM', col: 'linear-gradient(135deg,#22c55e,#059669)', name: 'Suraj M.' },
 ];
 
-function getJoinedEvents(){ return JSON.parse(localStorage.getItem('spx_joined_events')||'{}'); }
-function saveJoinedEvents(obj){ localStorage.setItem('spx_joined_events', JSON.stringify(obj)); }
+function getJoinedEvents() { return JSON.parse(localStorage.getItem('spx_joined_events') || '{}'); }
+function saveJoinedEvents(obj) { localStorage.setItem('spx_joined_events', JSON.stringify(obj)); }
 
 function renderCommModal() {
   const joined = getJoinedEvents();
   let totalMembers = 2048;
-  Object.values(joined).forEach(j => { if(j) totalMembers++; });
+  Object.values(joined).forEach(j => { if (j) totalMembers++; });
 
   commBody.innerHTML = `
     <div class="comm-stats">
@@ -841,9 +716,9 @@ function renderCommModal() {
 
     <div class="comm-events-title">Nearby Cleanup Events</div>
     ${COMM_EVENTS.map(ev => {
-      const isJoined = !!joined[ev.id];
-      const displayCount = isJoined ? ev.count + 1 : ev.count;
-      return `
+    const isJoined = !!joined[ev.id];
+    const displayCount = isJoined ? ev.count + 1 : ev.count;
+    return `
       <div class="comm-event-card">
         <div class="comm-event-top">
           <div>
@@ -858,42 +733,42 @@ function renderCommModal() {
         <div class="comm-event-footer">
           <span class="comm-event-count" id="evCount-${ev.id}">👥 <span id="evNum-${ev.id}">${displayCount}</span> joining</span>
           <button
-            class="comm-join-btn${isJoined?' joined':''}"
+            class="comm-join-btn${isJoined ? ' joined' : ''}"
             id="joinBtn-${ev.id}"
             data-event="${ev.id}"
             data-base="${ev.count}"
-            ${isJoined?'disabled':''}
+            ${isJoined ? 'disabled' : ''}
           >${isJoined ? '✓ Joined' : 'Join Event'}</button>
         </div>
       </div>`;
-    }).join('')}
+  }).join('')}
   `;
 
   /* Bind join buttons */
   document.querySelectorAll('.comm-join-btn:not(.joined)').forEach(btn => {
     btn.addEventListener('click', () => {
-      const evId   = btn.dataset.event;
-      const base   = parseInt(btn.dataset.base, 10);
+      const evId = btn.dataset.event;
+      const base = parseInt(btn.dataset.base, 10);
       const joined = getJoinedEvents();
       joined[evId] = true;
       saveJoinedEvents(joined);
 
       /* Update UI */
-      btn.textContent  = '✓ Joined';
+      btn.textContent = '✓ Joined';
       btn.classList.add('joined');
-      btn.disabled     = true;
+      btn.disabled = true;
 
       const numEl = document.getElementById(`evNum-${evId}`);
       if (numEl) numEl.textContent = base + 1;
 
       /* Bump total count */
       const tot = document.getElementById('commTotalCount');
-      if (tot) tot.textContent = (parseInt(tot.textContent.replace(/,/g,''), 10) + 1).toLocaleString('en-IN');
+      if (tot) tot.textContent = (parseInt(tot.textContent.replace(/,/g, ''), 10) + 1).toLocaleString('en-IN');
     });
   });
 }
 
-function openCommModal(){
+function openCommModal() {
   renderCommModal();
   requestAnimationFrame(() => {
     requestAnimationFrame(() => commOverlay.classList.add('comm-open'));
@@ -901,178 +776,18 @@ function openCommModal(){
   document.body.style.overflow = 'hidden';
 }
 
-function closeCommModal(){
+function closeCommModal() {
   commOverlay.classList.remove('comm-open');
   setTimeout(() => { document.body.style.overflow = ''; }, 320);
 }
 
 commClose?.addEventListener('click', closeCommModal);
-commOverlay?.addEventListener('click', e => { if(e.target === commOverlay) closeCommModal(); });
+commOverlay?.addEventListener('click', e => { if (e.target === commOverlay) closeCommModal(); });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && commOverlay?.classList.contains('comm-open')) closeCommModal();
 });
 
-/* ============================================================
-   BENGALURU WARD MAP – Real Leaflet choropleth
-   Lazy-initialised via IntersectionObserver so the container
-   has real dimensions before Leaflet runs.
-============================================================ */
-(function initBengaluruMap() {
 
-  const mapEl = document.getElementById('blrMap');
-  if (!mapEl) return;
-
-  /* Ward data */
-  const WARDS = [
-    { name:'HSR – Singasandra',     rate:89, active:62,  resolved:107, lat:12.914, lng:77.641 },
-    { name:'Koramangala 4th Block', rate:92, active:14,  resolved:342, lat:12.935, lng:77.627 },
-    { name:'Indiranagar',           rate:78, active:38,  resolved:210, lat:12.971, lng:77.640 },
-    { name:'Whitefield',            rate:55, active:91,  resolved:88,  lat:12.966, lng:77.750 },
-    { name:'Rajajinagar',           rate:82, active:29,  resolved:180, lat:12.990, lng:77.553 },
-    { name:'Hebbal',                rate:71, active:44,  resolved:140, lat:13.035, lng:77.597 },
-    { name:'Jayanagar',             rate:95, active:8,   resolved:280, lat:12.925, lng:77.583 },
-    { name:'BTM Layout',            rate:63, active:67,  resolved:115, lat:12.912, lng:77.610 },
-    { name:'Marathahalli',          rate:55, active:82,  resolved:79,  lat:12.956, lng:77.701 },
-    { name:'Yelahanka',             rate:80, active:31,  resolved:155, lat:13.101, lng:77.596 },
-    { name:'JP Nagar',              rate:88, active:22,  resolved:198, lat:12.900, lng:77.587 },
-    { name:'Basavanagudi',          rate:91, active:18,  resolved:230, lat:12.942, lng:77.575 },
-    { name:'Malleshwaram',          rate:74, active:51,  resolved:163, lat:13.003, lng:77.570 },
-    { name:'Electronic City',       rate:58, active:76,  resolved:94,  lat:12.843, lng:77.676 },
-    { name:'Bannerghatta Road',     rate:67, active:59,  resolved:121, lat:12.878, lng:77.604 },
-    { name:'Madivala',              rate:83, active:27,  resolved:175, lat:12.921, lng:77.619 },
-    { name:'Bellandur',             rate:60, active:73,  resolved:105, lat:12.926, lng:77.678 },
-    { name:'Ulsoor',                rate:76, active:41,  resolved:152, lat:12.982, lng:77.623 },
-    { name:'RT Nagar',              rate:84, active:24,  resolved:184, lat:13.022, lng:77.594 },
-    { name:'Byatarayanapura',       rate:57, active:85,  resolved:87,  lat:13.068, lng:77.564 },
-  ];
-
-  function getColor(rate) {
-    return rate >= 80 ? '#22c55e' : rate >= 60 ? '#f59e0b' : '#ef4444';
-  }
-  function getBadge(rate) {
-    return rate >= 80
-      ? { cls:'badge-green',  label:'Green (Excellent)' }
-      : rate >= 60
-        ? { cls:'badge-yellow', label:'Amber (Average)' }
-        : { cls:'badge-red',    label:'Red (Needs Work)' };
-  }
-
-  /* Panel refs */
-  const panelDefault  = document.getElementById('blrPanelDefault');
-  const wardStats     = document.getElementById('blrWardStats');
-  const elWardName    = document.getElementById('blrWardName');
-  const elBadge       = document.getElementById('blrStatsBadge');
-  const elBar         = document.getElementById('blrRateBar');
-  const elPct         = document.getElementById('blrRatePct');
-  const elActive      = document.getElementById('blrActive');
-  const elResolved    = document.getElementById('blrResolved');
-
-  function showWardStats(ward) {
-    if (!panelDefault || !wardStats) return;
-    panelDefault.style.display = 'none';
-    wardStats.style.display    = 'flex';
-    const badge = getBadge(ward.rate);
-    elWardName.textContent  = ward.name;
-    elBadge.className       = 'blr-stats-badge ' + badge.cls;
-    elBadge.textContent     = badge.label;
-    elPct.textContent       = ward.rate + '%';
-    elPct.style.color       = getColor(ward.rate);
-    elActive.textContent    = ward.active;
-    elResolved.textContent  = ward.resolved;
-    elBar.style.width       = '0%';
-    elBar.style.background  = getColor(ward.rate);
-    setTimeout(() => { elBar.style.width = ward.rate + '%'; }, 60);
-  }
-
-  let mapInitialised = false;
-
-  function buildMap() {
-    if (mapInitialised || typeof L === 'undefined') return;
-    /* Guard: check the *container* (not the absolute child) has real dimensions */
-    const container = mapEl.parentElement;
-    if (!container || container.offsetWidth === 0 || container.offsetHeight === 0) {
-      setTimeout(buildMap, 120);
-      return;
-    }
-    mapInitialised = true;
-
-    const map = L.map('blrMap', {
-      center: [12.970, 77.600],
-      zoom: 11,
-      zoomControl: true,
-      scrollWheelZoom: false,
-      attributionControl: true,
-    });
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 18,
-    }).addTo(map);
-
-    /* Draw ward circles */
-    WARDS.forEach(ward => {
-      const col    = getColor(ward.rate);
-      const radius = 900 + (ward.active / 100) * 500;
-
-      const circle = L.circle([ward.lat, ward.lng], {
-        radius,
-        color:       col,
-        fillColor:   col,
-        fillOpacity: 0.4,
-        weight:      2,
-        opacity:     0.85,
-      }).addTo(map);
-
-      circle.bindPopup(
-        `<div style="font-family:'Inter',sans-serif;min-width:160px">
-          <b style="font-size:.85rem;color:#111">${ward.name}</b><br>
-          <span style="font-size:.72rem;color:#555">Resolution: </span>
-          <strong style="color:${col}">${ward.rate}%</strong><br>
-          <span style="font-size:.7rem;color:#555">Active: ${ward.active} · Resolved: ${ward.resolved}</span>
-        </div>`,
-        { maxWidth: 220 }
-      );
-
-      circle.on('click',     ()  => showWardStats(ward));
-      circle.on('mouseover', ()  => { circle.setStyle({ fillOpacity:0.7, weight:3 }); circle.openPopup(); });
-      circle.on('mouseout',  ()  => circle.setStyle({ fillOpacity:0.4, weight:2 }));
-    });
-
-    /* Legend */
-    const legend = L.control({ position:'bottomleft' });
-    legend.onAdd = () => {
-      const d = L.DomUtil.create('div');
-      d.innerHTML = `<div style="background:rgba(10,10,10,.9);border:1px solid rgba(255,255,255,.1);
-        border-radius:8px;padding:9px 12px;font-family:'Inter',sans-serif;font-size:.7rem">
-        <div style="color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Ward Status</div>
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-          <span style="width:9px;height:9px;border-radius:50%;background:#22c55e;flex-shrink:0"></span>
-          <span style="color:#94a3b8">&gt;80% Resolved</span></div>
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-          <span style="width:9px;height:9px;border-radius:50%;background:#f59e0b;flex-shrink:0"></span>
-          <span style="color:#94a3b8">60–80%</span></div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <span style="width:9px;height:9px;border-radius:50%;background:#ef4444;flex-shrink:0"></span>
-          <span style="color:#94a3b8">&lt;60%</span></div>
-      </div>`;
-      return d;
-    };
-    legend.addTo(map);
-
-    /* Invalidate size after a tick so tiles render correctly */
-    setTimeout(() => map.invalidateSize(), 200);
-  }
-
-  /* Use IntersectionObserver to build map only when visible */
-  const obs = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) {
-      obs.disconnect();
-      buildMap();
-    }
-  }, { threshold: 0.05 });
-  obs.observe(mapEl);
-
-})();
 
 /* ============================================================
    HOW IT WORKS – Interactive Steps
@@ -1080,7 +795,7 @@ document.addEventListener('keydown', e => {
 (function initHowItWorks() {
 
   /* ── Step switching ── */
-  const steps  = document.querySelectorAll('.hiw-step');
+  const steps = document.querySelectorAll('.hiw-step');
   const panels = { report: 'hiwPanelReport', track: 'hiwPanelTrack', clean: 'hiwPanelClean' };
 
   function switchStep(name) {
@@ -1097,17 +812,17 @@ document.addEventListener('keydown', e => {
   steps.forEach(s => s.addEventListener('click', () => switchStep(s.dataset.step)));
 
   /* ── Report Form ── */
-  const form          = document.getElementById('hiwReportForm');
-  const photoInput    = document.getElementById('hiwPhotoInput');
-  const photoPreview  = document.getElementById('hiwPhotoPreview');
-  const uploadPH      = document.getElementById('hiwUploadPlaceholder');
+  const form = document.getElementById('hiwReportForm');
+  const photoInput = document.getElementById('hiwPhotoInput');
+  const photoPreview = document.getElementById('hiwPhotoPreview');
+  const uploadPH = document.getElementById('hiwUploadPlaceholder');
   const locationInput = document.getElementById('hiwLocation');
-  const detectBtn     = document.getElementById('hiwDetectBtn');
-  const catInput      = document.getElementById('hiwCategory');
-  const descInput     = document.getElementById('hiwDesc');
-  const successDiv    = document.getElementById('hiwReportSuccess');
-  const reportIdDisp  = document.getElementById('hiwReportIdDisplay');
-  const trackNowBtn   = document.getElementById('hiwTrackNowBtn');
+  const detectBtn = document.getElementById('hiwDetectBtn');
+  const catInput = document.getElementById('hiwCategory');
+  const descInput = document.getElementById('hiwDesc');
+  const successDiv = document.getElementById('hiwReportSuccess');
+  const reportIdDisp = document.getElementById('hiwReportIdDisplay');
+  const trackNowBtn = document.getElementById('hiwTrackNowBtn');
 
   let photoDataURL = null;
 
@@ -1160,12 +875,12 @@ document.addEventListener('keydown', e => {
 
   // Form validation helpers
   function showErr(id, msg) { const el = document.getElementById(id); if (el) el.textContent = msg; }
-  function clearErr(id)     { const el = document.getElementById(id); if (el) el.textContent = ''; }
+  function clearErr(id) { const el = document.getElementById(id); if (el) el.textContent = ''; }
   function setInputErr(el, has) { el?.classList.toggle('hiw-input-err', has); }
 
   // Generate unique report ID
   function genReportId() {
-    const now  = new Date();
+    const now = new Date();
     const rand = Math.floor(Math.random() * 900000 + 100000);
     return `SPX-${now.getFullYear()}-${rand}`;
   }
@@ -1179,19 +894,19 @@ document.addEventListener('keydown', e => {
     setInputErr(locationInput, false); setInputErr(descInput, false);
 
     if (!photoDataURL) { showErr('errPhoto', 'Please upload a photo of the issue.'); valid = false; }
-    const loc  = locationInput?.value.trim();
-    if (!loc)   { showErr('errLoc',   'Location is required.'); setInputErr(locationInput, true); valid = false; }
-    const cat  = catInput?.value;
-    if (!cat)   { showErr('errCat',   'Please select a category.'); valid = false; }
+    const loc = locationInput?.value.trim();
+    if (!loc) { showErr('errLoc', 'Location is required.'); setInputErr(locationInput, true); valid = false; }
+    const cat = catInput?.value;
+    if (!cat) { showErr('errCat', 'Please select a category.'); valid = false; }
     const desc = descInput?.value.trim();
-    if (!desc)  { showErr('errDesc',  'Description is required.'); setInputErr(descInput, true); valid = false; }
+    if (!desc) { showErr('errDesc', 'Description is required.'); setInputErr(descInput, true); valid = false; }
     if (!valid) return;
 
-    const id     = genReportId();
+    const id = genReportId();
     const report = {
       id, loc, cat, desc,
       photo: photoDataURL,
-      date:  new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }),
+      date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
       status: 'Submitted',
       statusIdx: 0,
     };
@@ -1202,7 +917,7 @@ document.addEventListener('keydown', e => {
     localStorage.setItem('hiw_reports', JSON.stringify(reports));
     // Also save to existing spx_reports for My Reports screen
     const spxReports = JSON.parse(localStorage.getItem('spx_reports') || '[]');
-    spxReports.unshift({ id: Date.now(), title:`${cat} Issue`, loc, desc, status:'Pending', date:report.date, cat, color:'#854d0e' });
+    spxReports.unshift({ id: Date.now(), title: `${cat} Issue`, loc, desc, status: 'Pending', date: report.date, cat, color: '#854d0e' });
     localStorage.setItem('spx_reports', JSON.stringify(spxReports));
 
     if (form) form.style.display = 'none';
@@ -1222,18 +937,18 @@ document.addEventListener('keydown', e => {
   });
 
   /* ── Track Panel ── */
-  const STATUS_STAGES = ['Submitted','Under Review','Assigned','Cleaning in Progress','Completed'];
+  const STATUS_STAGES = ['Submitted', 'Under Review', 'Assigned', 'Cleaning in Progress', 'Completed'];
 
   document.getElementById('hiwTrackBtn')?.addEventListener('click', () => {
     const input = document.getElementById('hiwTrackInput');
     const errEl = document.getElementById('errTrack');
-    const id    = input?.value.trim();
+    const id = input?.value.trim();
 
     if (errEl) errEl.textContent = '';
-    if (!id)   { if (errEl) errEl.textContent = 'Please enter a Report ID.'; return; }
+    if (!id) { if (errEl) errEl.textContent = 'Please enter a Report ID.'; return; }
 
     const reports = JSON.parse(localStorage.getItem('hiw_reports') || '[]');
-    const report  = reports.find(r => r.id === id);
+    const report = reports.find(r => r.id === id);
 
     if (!report) {
       // Demo report for testing
@@ -1250,9 +965,9 @@ document.addEventListener('keydown', e => {
   function showDemoTrack(id) {
     renderTrackResult({
       id,
-      loc:   'Koramangala 4th Block, Bengaluru',
-      cat:   'Garbage',
-      date:  new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }),
+      loc: 'Koramangala 4th Block, Bengaluru',
+      cat: 'Garbage',
+      date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
       statusIdx: 2,
       status: 'Assigned',
     });
@@ -1263,19 +978,19 @@ document.addEventListener('keydown', e => {
     if (!result) return;
 
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-    set('trLoc',  report.loc);
-    set('trCat',  report.cat);
+    set('trLoc', report.loc);
+    set('trCat', report.cat);
     set('trDate', report.date);
-    set('trId',   report.id);
+    set('trId', report.id);
 
     // Build timeline
     const stepsWrap = document.getElementById('hiwTlSteps');
-    const bar       = document.getElementById('hiwTlBar');
+    const bar = document.getElementById('hiwTlBar');
     if (stepsWrap) {
       stepsWrap.innerHTML = STATUS_STAGES.map((s, i) => {
-        const isDone   = i < report.statusIdx;
+        const isDone = i < report.statusIdx;
         const isActive = i === report.statusIdx;
-        const cls      = isDone ? 'hiw-tls-done' : isActive ? 'hiw-tls-active' : '';
+        const cls = isDone ? 'hiw-tls-done' : isActive ? 'hiw-tls-active' : '';
         return `<div class="hiw-tl-step ${cls}"><div class="hiw-tls-dot"></div>${s}</div>`;
       }).join('');
     }
@@ -1296,10 +1011,10 @@ document.addEventListener('keydown', e => {
     if (report.statusIdx >= STATUS_STAGES.length - 1 || report.status === 'Completed') {
       setTimeout(() => {
         switchStep('clean');
-        const cleanLoc  = document.getElementById('cleanLoc');
+        const cleanLoc = document.getElementById('cleanLoc');
         const cleanDate = document.getElementById('cleanDate');
-        if (cleanLoc)  cleanLoc.textContent  = report.loc || 'Bengaluru';
-        if (cleanDate) cleanDate.textContent = new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+        if (cleanLoc) cleanLoc.textContent = report.loc || 'Bengaluru';
+        if (cleanDate) cleanDate.textContent = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
       }, 1200);
     }
   }
@@ -1308,7 +1023,7 @@ document.addEventListener('keydown', e => {
   document.getElementById('hiwShareBtn')?.addEventListener('click', () => {
     const text = 'A civic issue in Bengaluru has been successfully cleaned by BBMP thanks to Spottix! 🌿 #Spottix #CleanBengaluru';
     if (navigator.share) {
-      navigator.share({ title:'Spottix – Area Cleaned!', text, url: window.location.href }).catch(() => {});
+      navigator.share({ title: 'Spottix – Area Cleaned!', text, url: window.location.href }).catch(() => { });
     } else {
       navigator.clipboard?.writeText(text).then(() => {
         const btn = document.getElementById('hiwShareBtn');
@@ -1318,3 +1033,345 @@ document.addEventListener('keydown', e => {
   });
 
 })();
+
+/* ============================================================
+   BENGALURU LIVE MAP  — uses id="bengaluruMap"
+============================================================ */
+(function () {
+  'use strict';
+
+  // Ward mock resolver to map to properties in GeoJSON
+  var WARD_ADDRESSES = {
+    "Malleswaram": "Malleswaram, Bengaluru, 560003",
+    "Yelahanka": "Yelahanka, Bengaluru, 560064",
+    "Yelahanka Satellite Town": "Yelahanka Satellite Town, Bengaluru, 560064",
+    "HSR Layout": "Bandepalya, HSR - Singasandra, Bengaluru, 560068",
+    "Koramangala": "4th Block, Koramangala, Bengaluru, 560034",
+    "Indiranagar": "100ft Road, Indiranagar, Bengaluru, 560038",
+    "Domlur": "Domlur, Bengaluru, 560071",
+    "Whitefield": "ITPL Main Road, Whitefield, Bengaluru, 560066",
+    "Bellandur": "Bellandur, Bengaluru, 560103",
+    "Hebbal": "Hebbal, Bengaluru, 560024",
+    "Byrasandra": "Byrasandra, Bengaluru, 560011",
+    "Jayanagar": "Jayanagar 4th Block, Bengaluru, 560041",
+    "JP Nagar": "JP Nagar 6th Phase, Bengaluru, 560078",
+    "Marathahalli": "Marathahalli Bridge, Bengaluru, 560037",
+    "BTM Layout": "BTM 2nd Stage, Bengaluru, 560076",
+    "Rajajinagar": "Rajajinagar, Bengaluru, 560010",
+    "Electronic City": "Electronic City Phase 1, Bengaluru, 560100",
+    "Vijayanagar": "Vijayanagar, Bengaluru, 560040",
+    "Banashankari": "Banashankari 3rd Stage, Bengaluru, 560085",
+    "Basavanagudi": "Basavanagudi, Bengaluru, 560004",
+    "Shivajinagar": "Shivajinagar, Bengaluru, 560051",
+    "Cox Town": "Cox Town, Bengaluru, 560005",
+    "Frazer Town": "Frazer Town, Bengaluru, 560005",
+    "Benson Town": "Benson Town, Bengaluru, 560046",
+    "Ulsoor": "Ulsoor, Bengaluru, 560008",
+    "Kammanahalli": "Kammanahalli, Bengaluru, 560084",
+    "RT Nagar": "RT Nagar, Bengaluru, 560032",
+    "Sadashivanagar": "Sadashivanagar, Bengaluru, 560080",
+    "Yeshwanthpur": "Yeshwanthpur, Bengaluru, 560022",
+    "Dasarahalli": "Dasarahalli, Bengaluru, 560057",
+    "Kempegowda Ward": "Kempegowda Ward, Bengaluru, 560009",
+    "Peenya": "Peenya Industrial Area, Bengaluru, 560058",
+    "Nandini Layout": "Nandini Layout, Bengaluru, 560096",
+    "Subramanya Nagar": "Subramanya Nagar, Bengaluru, 560021",
+    "Kadu Malleshwara": "Kadu Malleshwara, Bengaluru, 560003",
+    "Rajamahal Guttahalli": "Rajamahal Guttahalli, Bengaluru, 560003",
+    "Aramane Nagara": "Aramane Nagara, Bengaluru, 560002",
+    "Dattatreya Temple": "Dattatreya Temple Ward, Bengaluru, 560002",
+    "Srirampura": "Srirampura, Bengaluru, 560021",
+    "Kothigepalya": "Kothigepalya, Bengaluru, 560058",
+    "Vidhata Soudha": "Vidhata Soudha Ward, Bengaluru, 560009"
+  };
+
+  function getWardData(wardName) {
+    var WARD_DATA_MOCK = {
+      "Malleswaram":         { wardNo: 10,  resolutionRate: 91, activeIssues: 11, resolvedIssues: 315 },
+      "Yelahanka":           { wardNo: 5,   resolutionRate: 85, activeIssues: 16, resolvedIssues: 210 },
+      "Yelahanka Satellite Town": { wardNo: 4, resolutionRate: 83, activeIssues: 18, resolvedIssues: 196 },
+      "HSR Layout":          { wardNo: 151, resolutionRate: 92, activeIssues: 14, resolvedIssues: 342 },
+      "Koramangala":         { wardNo: 150, resolutionRate: 76, activeIssues: 28, resolvedIssues: 295 },
+      "Indiranagar":         { wardNo: 81,  resolutionRate: 88, activeIssues: 9,  resolvedIssues: 428 },
+      "Domlur":              { wardNo: 83,  resolutionRate: 84, activeIssues: 16, resolvedIssues: 277 },
+      "Whitefield":          { wardNo: 84,  resolutionRate: 52, activeIssues: 78, resolvedIssues: 194 },
+      "Bellandur":           { wardNo: 152, resolutionRate: 48, activeIssues: 84, resolvedIssues: 156 },
+      "Hebbal":              { wardNo: 22,  resolutionRate: 71, activeIssues: 32, resolvedIssues: 204 },
+      "Byrasandra":          { wardNo: 196, resolutionRate: 79, activeIssues: 18, resolvedIssues: 189 },
+      "Jayanagar":           { wardNo: 167, resolutionRate: 83, activeIssues: 21, resolvedIssues: 312 },
+      "JP Nagar":            { wardNo: 177, resolutionRate: 67, activeIssues: 45, resolvedIssues: 187 },
+      "Marathahalli":        { wardNo: 85,  resolutionRate: 55, activeIssues: 62, resolvedIssues: 174 },
+      "BTM Layout":          { wardNo: 155, resolutionRate: 74, activeIssues: 33, resolvedIssues: 221 },
+      "Rajajinagar":         { wardNo: 55,  resolutionRate: 89, activeIssues: 12, resolvedIssues: 298 },
+      "Electronic City":     { wardNo: 193, resolutionRate: 44, activeIssues: 91, resolvedIssues: 134 },
+      "Vijayanagar":         { wardNo: 49,  resolutionRate: 81, activeIssues: 19, resolvedIssues: 267 },
+      "Banashankari":        { wardNo: 161, resolutionRate: 69, activeIssues: 38, resolvedIssues: 198 },
+      "Basavanagudi":        { wardNo: 163, resolutionRate: 86, activeIssues: 15, resolvedIssues: 308 },
+      "Shivajinagar":        { wardNo: 72,  resolutionRate: 78, activeIssues: 24, resolvedIssues: 245 },
+      "Cox Town":            { wardNo: 77,  resolutionRate: 82, activeIssues: 17, resolvedIssues: 289 },
+      "Frazer Town":         { wardNo: 78,  resolutionRate: 73, activeIssues: 29, resolvedIssues: 213 },
+      "Benson Town":         { wardNo: 76,  resolutionRate: 90, activeIssues: 8,  resolvedIssues: 334 },
+      "Ulsoor":              { wardNo: 80,  resolutionRate: 77, activeIssues: 26, resolvedIssues: 231 },
+      "Kammanahalli":        { wardNo: 88,  resolutionRate: 62, activeIssues: 49, resolvedIssues: 178 },
+      "RT Nagar":            { wardNo: 10,  resolutionRate: 75, activeIssues: 27, resolvedIssues: 222 },
+      "Sadashivanagar":      { wardNo: 11,  resolutionRate: 94, activeIssues: 6,  resolvedIssues: 389 },
+      "Yeshwanthpur":        { wardNo: 40,  resolutionRate: 68, activeIssues: 41, resolvedIssues: 196 },
+      "Dasarahalli":         { wardNo: 35,  resolutionRate: 53, activeIssues: 66, resolvedIssues: 158 },
+      "Kempegowda Ward":     { wardNo: 1,   resolutionRate: 72, activeIssues: 30, resolvedIssues: 215 },
+      "Peenya":              { wardNo: 12,  resolutionRate: 61, activeIssues: 47, resolvedIssues: 172 },
+      "Nandini Layout":      { wardNo: 14,  resolutionRate: 77, activeIssues: 23, resolvedIssues: 238 },
+      "Subramanya Nagar":    { wardNo: 15,  resolutionRate: 80, activeIssues: 20, resolvedIssues: 260 },
+      "Kadu Malleshwara":    { wardNo: 17,  resolutionRate: 88, activeIssues: 10, resolvedIssues: 310 },
+      "Rajamahal Guttahalli":{ wardNo: 18,  resolutionRate: 82, activeIssues: 16, resolvedIssues: 278 },
+      "Aramane Nagara":      { wardNo: 9,   resolutionRate: 74, activeIssues: 28, resolvedIssues: 225 },
+      "Dattatreya Temple":   { wardNo: 20,  resolutionRate: 66, activeIssues: 42, resolvedIssues: 183 },
+      "Srirampura":          { wardNo: 21,  resolutionRate: 58, activeIssues: 55, resolvedIssues: 162 },
+      "Kothigepalya":        { wardNo: 23,  resolutionRate: 70, activeIssues: 35, resolvedIssues: 208 },
+      "Vidhata Soudha":      { wardNo: 24,  resolutionRate: 85, activeIssues: 13, resolvedIssues: 295 }
+    };
+    
+    var cleanName = wardName ? wardName.trim() : "";
+    if (WARD_DATA_MOCK[cleanName]) return WARD_DATA_MOCK[cleanName];
+
+    var hash = 0;
+    for (var i = 0; i < cleanName.length; i++) {
+      hash = (hash * 31 + cleanName.charCodeAt(i)) & 0xffff;
+    }
+    var rate = 45 + (hash % 50);
+    return {
+      wardNo: 100 + (hash % 100),
+      resolutionRate: rate,
+      activeIssues: 5 + (hash % 50),
+      resolvedIssues: 50 + (hash % 200)
+    };
+  }
+
+  function getWardAddress(wardName) {
+    var cleanName = wardName ? wardName.trim() : "";
+    if (WARD_ADDRESSES[cleanName]) return WARD_ADDRESSES[cleanName];
+    return cleanName + ', Bengaluru';
+  }
+
+  function getColor(rate) {
+    return rate >= 80 ? '#22c55e' : rate >= 60 ? '#f59e0b' : '#ef4444';
+  }
+
+  function showStats(name, w) {
+    var def = document.getElementById('blrDefault');
+    var stats = document.getElementById('blrStats');
+    if (!def || !stats) return;
+    def.style.display = 'none';
+    stats.style.display = 'flex';
+
+    var set = function(id, v) {
+      var e = document.getElementById(id);
+      if (e) e.textContent = v;
+    };
+    
+    set('blrName', name + (w.wardNo ? ' (Ward ' + w.wardNo + ')' : ''));
+    set('blrAddr', getWardAddress(name));
+    set('blrPct', w.resolutionRate + '%');
+    set('blrActive', w.activeIssues);
+    set('blrResolved', w.resolvedIssues);
+
+    var pctEl = document.getElementById('blrPct');
+    if (pctEl) pctEl.style.color = getColor(w.resolutionRate);
+
+    var bar = document.getElementById('blrBar');
+    if (bar) {
+      bar.style.background = getColor(w.resolutionRate);
+      bar.style.width = '0%';
+      setTimeout(function() {
+        bar.style.width = w.resolutionRate + '%';
+      }, 80);
+    }
+
+    var badge = document.getElementById('blrBadge');
+    if (badge) {
+      var t = w.resolutionRate >= 80 ? 'Green (Excellent)' : w.resolutionRate >= 60 ? 'Amber (Average)' : 'Red (Needs Work)';
+      var c = w.resolutionRate >= 80 ? 'bg' : w.resolutionRate >= 60 ? 'by' : 'br';
+      badge.textContent = t;
+      badge.className = 'blr-badge ' + c;
+    }
+  }
+
+  function buildBengaluruMap() {
+    if (typeof L === 'undefined') return;
+    var el = document.getElementById('bengaluruMap');
+    if (!el || el._leaflet_id) return;
+
+    var map = L.map('bengaluruMap', {
+      center: [12.9716, 77.5946],
+      zoom: 11,
+      minZoom: 10,
+      maxZoom: 16,
+      zoomControl: true,
+      scrollWheelZoom: false,
+      attributionControl: true
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    var geojsonLayer;
+    var selectedLayer = null;
+
+    function getFeatureName(f) {
+      return f.properties.name || f.properties.wardName || f.properties.KGISWardName || "Ward";
+    }
+
+    function styleFeature(f) {
+      var name = getFeatureName(f);
+      var data = getWardData(name);
+      var c = getColor(data.resolutionRate);
+      return {
+        fillColor: c,
+        fillOpacity: 0.55,
+        color: '#ffffff',
+        weight: 1.5,
+        opacity: 0.8
+      };
+    }
+
+    function onEachFeature(f, layer) {
+      var name = getFeatureName(f);
+      
+      layer.on({
+        mouseover: function(e) {
+          var lyr = e.target;
+          if (lyr !== selectedLayer) {
+            lyr.setStyle({
+              fillOpacity: 0.75,
+              weight: 2.5
+            });
+          }
+        },
+        mouseout: function(e) {
+          var lyr = e.target;
+          if (lyr !== selectedLayer) {
+            geojsonLayer.resetStyle(lyr);
+          }
+        },
+        click: function(e) {
+          var lyr = e.target;
+          if (selectedLayer && selectedLayer !== lyr) {
+            geojsonLayer.resetStyle(selectedLayer);
+          }
+          selectedLayer = lyr;
+          
+          var rate = getWardData(name).resolutionRate;
+          var selectedColor = getColor(rate);
+          lyr.setStyle({
+            fillColor: selectedColor,
+            fillOpacity: 0.9,
+            weight: 3,
+            color: selectedColor
+          });
+          lyr.bringToFront();
+
+          var data = getWardData(name);
+          showStats(name, data);
+        }
+      });
+      layer.bindTooltip(name, { sticky: true, className: 'blr-tt' });
+    }
+
+    fetch('assets/bengaluru_wards.geojson')
+      .then(function(res) {
+        if (!res.ok) throw new Error("Could not load assets/bengaluru_wards.geojson");
+        return res.json();
+      })
+      .then(function(data) {
+        geojsonLayer = L.geoJSON(data, {
+          style: styleFeature,
+          onEachFeature: onEachFeature
+        }).addTo(map);
+
+        geojsonLayer.eachLayer(function(layer) {
+          var name = getFeatureName(layer.feature);
+          if (name.toLowerCase().includes('hsr')) {
+            layer.fire('click');
+            map.panTo(layer.getBounds().getCenter());
+          }
+        });
+      })
+      .catch(function(err) {
+        console.error(err);
+      });
+
+
+
+    var back = document.getElementById('blrBack');
+    if (back) {
+      back.addEventListener('click', function() {
+        document.getElementById('blrDefault').style.display = 'block';
+        document.getElementById('blrStats').style.display = 'none';
+        if (selectedLayer) {
+          geojsonLayer.resetStyle(selectedLayer);
+          selectedLayer = null;
+        }
+      });
+    }
+
+    [100, 300, 600, 1200].forEach(function(ms) {
+      setTimeout(function() {
+        map.invalidateSize();
+      }, ms);
+    });
+
+    window.addEventListener('resize', function() {
+      map.invalidateSize();
+    });
+  }
+
+  function buildMiniMap() {
+    if (typeof L === 'undefined') return;
+    var el = document.getElementById('miniMap');
+    if (!el || el._leaflet_id) return;
+
+    var map = L.map('miniMap', {
+      center: [12.9716, 77.5946],
+      zoom: 10.5,
+      zoomControl: false,
+      attributionControl: false,
+      scrollWheelZoom: false,
+      dragging: false,
+      touchZoom: false,
+      doubleClickZoom: false,
+      boxZoom: false,
+      keyboard: false
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+
+
+    [200, 500, 1000, 2000].forEach(function(ms) {
+      setTimeout(function() {
+        map.invalidateSize();
+      }, ms);
+    });
+  }
+
+  function boot() {
+    buildBengaluruMap();
+    buildMiniMap();
+  }
+
+  if (document.readyState !== 'loading') {
+    boot();
+    setTimeout(boot, 100);
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      boot();
+      setTimeout(boot, 100);
+    });
+  }
+  window.addEventListener('load', function() {
+    boot();
+    setTimeout(boot, 800);
+  });
+
+}());
